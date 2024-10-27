@@ -20,7 +20,7 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Proizvod>> UcitajProizvod(int id)
         {
-            var proizvod = await _proizvodService.UcitajZaProizvodID(id);
+            var proizvod = await _proizvodService.UcitajZaProizvodIdAsync(id);
             if (proizvod == null)
                 return NotFound();
 
@@ -30,7 +30,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Proizvod>>> UcitajSveProizvode()
         {
-            var proizvodi = await _proizvodService.UcitajSveProizvode();
+            var proizvodi = await _proizvodService.UcitajSveProizvodeAsync();
             return Ok(proizvodi);
         }
 
@@ -43,7 +43,6 @@ namespace API.Controllers
             _proizvodService.SnimiProizvod(proizvod);
             return Ok();
         }
-
 
         [HttpPut("{id}")]
         public IActionResult AzurirajProizvod(int id, [FromBody] Proizvod proizvod)
@@ -59,6 +58,21 @@ namespace API.Controllers
             _proizvodService.ObrisiProizvod(id);
             return Ok();
         }
+
+        [HttpGet("robneMarke")]
+        public async Task<ActionResult<List<RobnaMarka>>> UcitajSveRobneMarke()
+        {
+            var robneMarke = await _proizvodService.UcitajSveRobneMarkeAsync();
+            return Ok(robneMarke);
+        }
+
+       [HttpGet("vrsteProizvoda")]
+        public async Task<ActionResult<List<VrstaProizvoda>>> UcitajSveVrsteProizvoda()
+        {
+            var vrsteProizvoda = await _proizvodService.UcitajSveVrsteProizvodaAsync();
+            return Ok(vrsteProizvoda);
+        }
+
 
 
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAccess.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -15,15 +16,16 @@ namespace API
 {
     public class Startup
     {
+        private readonly IConfiguration _conf;
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _conf = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IProizvodRepository, ProizvodRepository>();
+            services.AddScoped<IProizvodService, ProizvodService>();
             services.AddControllers();
         }
 
@@ -34,7 +36,7 @@ namespace API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 

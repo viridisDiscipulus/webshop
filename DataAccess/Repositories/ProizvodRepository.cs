@@ -15,7 +15,7 @@ namespace DataAccess.Repositories
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public async Task<Proizvod> UcitajZaProizvodID(int id)
+        public async Task<Proizvod> UcitajZaProizvodIdAsync(int Id)
         {
             Proizvod proizvod = null;
 
@@ -23,8 +23,27 @@ namespace DataAccess.Repositories
             {
                 await con.OpenAsync();  
 
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Proizvod WHERE ID = @id", con);
-                cmd.Parameters.AddWithValue("@id", id);
+                string query = @"SELECT 
+                    p.Id,
+                    p.Naziv,
+                    p.Opis,
+                    p.Cijena,
+                    p.SlikaUrl,
+                    p.VrstaProizvodaID,
+                    vp.Naziv AS VrstaProizvodaNaziv,
+                    p.RobnaMarkaID,
+                    rm.Naziv AS RobnaMarkaNaziv
+                FROM 
+                    Proizvod p
+                INNER JOIN 
+                    VrstaProizvoda vp ON p.VrstaProizvodaID = vp.ID
+                INNER JOIN 
+                    RobnaMarka rm ON p.RobnaMarkaID = rm.ID
+                WHERE 
+                    p.Id = @ID;";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@ID", Id);
 
                 using (SqlDataReader dr = await cmd.ExecuteReaderAsync())
                 {
@@ -32,8 +51,23 @@ namespace DataAccess.Repositories
                     {
                         proizvod = new Proizvod
                         {
-                            Id = (int)dr["ID"],
-                            Naziv = dr["Naziv"].ToString(),
+                            Id = (int)dr["Id"],
+                            Naziv = (string)dr["Naziv"],
+                            Opis = (string)dr["Opis"],
+                            Cijena = (decimal)dr["Cijena"],
+                            SlikaUrl = (string)dr["SlikaUrl"],
+                            VrstaProizvodaID = (int)dr["VrstaProizvodaID"],
+                            VrstaProizvoda = new VrstaProizvoda
+                            {
+                                Id = (int)dr["VrstaProizvodaID"],
+                                Naziv = (string)dr["VrstaProizvodaNaziv"]
+                            },
+                            RobnaMarkaID = (int)dr["RobnaMarkaID"],
+                            RobnaMarka = new RobnaMarka
+                            {
+                                Id = (int)dr["RobnaMarkaID"],
+                                Naziv = (string)dr["RobnaMarkaNaziv"]
+                            }
                         };
                     }
                 }
@@ -42,7 +76,7 @@ namespace DataAccess.Repositories
             return proizvod;
         }
 
-       public async Task<IEnumerable<Proizvod>> UcitajSveProizvode()
+        public async Task<IEnumerable<Proizvod>> UcitajSveProizvodeAsync()
         {
             List<Proizvod> proizvodi = new List<Proizvod>();
 
@@ -50,7 +84,24 @@ namespace DataAccess.Repositories
             {
                 await con.OpenAsync();  
 
-                SqlCommand cmd = new SqlCommand("SELECT Id, Naziv FROM Proizvod", con);
+                 string query = @"SELECT 
+                    p.Id,
+                    p.Naziv,
+                    p.Opis,
+                    p.Cijena,
+                    p.SlikaUrl,
+                    p.VrstaProizvodaID,
+                    vp.Naziv AS VrstaProizvodaNaziv,
+                    p.RobnaMarkaID,
+                    rm.Naziv AS RobnaMarkaNaziv
+                FROM 
+                    Proizvod p
+                INNER JOIN 
+                    VrstaProizvoda vp ON p.VrstaProizvodaID = vp.ID
+                INNER JOIN 
+                    RobnaMarka rm ON p.RobnaMarkaID = rm.ID;";
+
+                SqlCommand cmd = new SqlCommand(query, con);
 
                 using (SqlDataReader dr = await cmd.ExecuteReaderAsync()) 
                 {
@@ -59,7 +110,22 @@ namespace DataAccess.Repositories
                         proizvodi.Add(new Proizvod
                         {
                             Id = (int)dr["Id"],
-                            Naziv = (string)dr["Naziv"]
+                            Naziv = (string)dr["Naziv"],
+                            Opis = (string)dr["Opis"],
+                            Cijena = (decimal)dr["Cijena"],
+                            SlikaUrl = (string)dr["SlikaUrl"],
+                            VrstaProizvodaID = (int)dr["VrstaProizvodaID"],
+                            VrstaProizvoda = new VrstaProizvoda
+                            {
+                                Id = (int)dr["VrstaProizvodaID"],
+                                Naziv = (string)dr["VrstaProizvodaNaziv"]
+                            },
+                            RobnaMarkaID = (int)dr["RobnaMarkaID"],
+                            RobnaMarka = new RobnaMarka
+                            {
+                                Id = (int)dr["RobnaMarkaID"],
+                                Naziv = (string)dr["RobnaMarkaNaziv"]
+                            }
                         });
                     }
                 }
@@ -67,6 +133,70 @@ namespace DataAccess.Repositories
 
             return proizvodi;
         }
+
+        public async Task<IEnumerable<RobnaMarka>> UcitajSveRobneMarkeAsync()
+        {
+            List<RobnaMarka> robnaMarka = new List<RobnaMarka>();
+
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                await con.OpenAsync();  
+
+                 string query = @"SELECT ID
+                                        ,Naziv
+                                FROM dbo.RobnaMarka;";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+
+                using (SqlDataReader dr = await cmd.ExecuteReaderAsync()) 
+                {
+                    while (await dr.ReadAsync())  
+                    {
+                        robnaMarka.Add(new RobnaMarka
+                        {
+                            Id = (int)dr["Id"],
+                            Naziv = (string)dr["Naziv"],
+                           
+                        });
+                    }
+                }
+            }
+
+            return robnaMarka;
+        }
+
+        public async Task<IEnumerable<VrstaProizvoda>> UcitajSveVrsteProizvodaAsync()
+        {
+            List<VrstaProizvoda> vrstaProizvoda = new List<VrstaProizvoda>();
+
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                await con.OpenAsync();  
+
+                 string query = @"SELECT ID
+                                        ,Naziv
+                                FROM dbo.VrstaProizvoda;";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+
+                using (SqlDataReader dr = await cmd.ExecuteReaderAsync()) 
+                {
+                    while (await dr.ReadAsync())  
+                    {
+                        vrstaProizvoda.Add(new VrstaProizvoda
+                        {
+                            Id = (int)dr["Id"],
+                            Naziv = (string)dr["Naziv"],
+                           
+                        });
+                    }
+                }
+            }
+
+            return vrstaProizvoda;
+        }
+
+
 
         public void SnimiProizvod(Proizvod proizvod)
         {
@@ -89,10 +219,10 @@ namespace DataAccess.Repositories
             {
                 connection.Open();
 
-                string query = "UPDATE Proizvodi SET Naziv = @Naziv WHERE Id = @Id";
+                string query = "UPDATE Proizvodi SET Naziv = @Naziv WHERE ID = @ID";
                 SqlCommand command = new SqlCommand(query, connection);
 
-                command.Parameters.AddWithValue("@Id", proizvod.Id);
+                command.Parameters.AddWithValue("@ID", proizvod.Id);
                 command.Parameters.AddWithValue("@Naziv", proizvod.Naziv);
 
                 command.ExecuteNonQuery();
@@ -108,10 +238,13 @@ namespace DataAccess.Repositories
                 string query = "DELETE FROM Proizvodi WHERE Id = @Id";
                 SqlCommand command = new SqlCommand(query, connection);
 
-                command.Parameters.AddWithValue("@Id", proizvodID);
+                command.Parameters.AddWithValue("@ID", proizvodID);
 
                 command.ExecuteNonQuery();
             }
         }
+
+      
+
     }
 }
