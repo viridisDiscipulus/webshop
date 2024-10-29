@@ -1,16 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using API.Miscellaneous;
+using AppDomainModel.Interfaces;
+using AutoMapper;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Services;
 
 namespace API
 {
@@ -24,8 +21,11 @@ namespace API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped(typeof(IGernericService<>), typeof(GenericService<>));                      
+           services.AddScoped(typeof(IGernericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IProizvodRepository, ProizvodRepository>();
             services.AddScoped<IProizvodService, ProizvodService>();
+            services.AddAutoMapper(typeof(ProfiliZaMappiranje));
             services.AddControllers();
         }
 
@@ -39,6 +39,8 @@ namespace API
             // app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 

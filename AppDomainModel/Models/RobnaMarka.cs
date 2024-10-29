@@ -1,3 +1,4 @@
+
 namespace AppDomainModel.Model
 {
     public class RobnaMarka : BaseModel 

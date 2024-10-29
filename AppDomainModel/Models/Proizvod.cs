@@ -1,3 +1,4 @@
+
 namespace AppDomainModel.Model
 {
     public class Proizvod : BaseModel 

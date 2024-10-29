@@ -2,16 +2,17 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AppDomainModel.Model;
 
-public interface IProizvodService 
+namespace AppDomainModel.Interfaces
 {
-    Task<Proizvod> UcitajZaProizvodIdAsync(int id);
-    Task<IEnumerable<Proizvod>> UcitajSveProizvodeAsync();
-    Task<IEnumerable<RobnaMarka>> UcitajSveRobneMarkeAsync();
-    Task<IEnumerable<VrstaProizvoda>> UcitajSveVrsteProizvodaAsync();
+    public interface IProizvodService
+    {
+        Task<Proizvod> UcitajZaProizvodIdAsync(int id);
+        Task<IEnumerable<Proizvod>> UcitajSveProizvodeAsync();
+        Task<IEnumerable<RobnaMarka>> UcitajSveRobneMarkeAsync();
+        Task<IEnumerable<VrstaProizvoda>> UcitajSveVrsteProizvodaAsync();
 
-
-
-    void SnimiProizvod(Proizvod proizvod);
-    void AzurirajProizvod(Proizvod proizvod);
-    void ObrisiProizvod(int proizvodID);
+        void SnimiProizvod(Proizvod proizvod);
+        void AzurirajProizvod(Proizvod proizvod);
+        void ObrisiProizvod(int proizvodID);
+    }
 }

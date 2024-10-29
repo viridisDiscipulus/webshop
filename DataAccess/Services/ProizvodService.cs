@@ -1,50 +1,54 @@
 using System.Collections.Generic;
 using AppDomainModel.Model;
 using System.Threading.Tasks;
+using AppDomainModel.Interfaces;
 
+namespace Services {
+    
 public class ProizvodService : IProizvodService
 {
-    private readonly IProizvodRepository _productRepository;
+    private readonly IProizvodRepository _proizvodRepository;
 
-    public ProizvodService(IProizvodRepository productRepository)
+    public ProizvodService(IProizvodRepository proizvodRepository)
     {
-        _productRepository = productRepository;
+        _proizvodRepository = proizvodRepository;
     }   
 
     public void AzurirajProizvod(Proizvod proizvod)
     {
-        _productRepository.AzurirajProizvod(proizvod);
+        _proizvodRepository.AzurirajProizvod(proizvod);
     }
 
     public void SnimiProizvod(Proizvod proizvod)
     {
-        _productRepository.SnimiProizvod(proizvod);
+        _proizvodRepository.SnimiProizvod(proizvod);
     }
 
     public void ObrisiProizvod(int proizvodId)
     {
-        _productRepository.ObrisiProizvod(proizvodId);
+        _proizvodRepository.ObrisiProizvod(proizvodId);
     }
     
     public async Task<Proizvod> UcitajZaProizvodIdAsync(int Id)
     {
-       return await _productRepository.UcitajZaProizvodIdAsync(Id);
+       return await _proizvodRepository.UcitajZaProizvodIdAsync(Id);
     }
     
     public async Task<IEnumerable<Proizvod>> UcitajSveProizvodeAsync()
     {
-        return await _productRepository.UcitajSveProizvodeAsync();
+        return await _proizvodRepository.UcitajSveProizvodeAsync();
     }
 
     public async Task<IEnumerable<RobnaMarka>> UcitajSveRobneMarkeAsync()
     {
-        return await _productRepository.UcitajSveRobneMarkeAsync();
+        return await _proizvodRepository.UcitajSveRobneMarkeAsync();
     }
 
     public async Task<IEnumerable<VrstaProizvoda>> UcitajSveVrsteProizvodaAsync()
     {
-        return await _productRepository.UcitajSveVrsteProizvodaAsync();
+        return await _proizvodRepository.UcitajSveVrsteProizvodaAsync();
     }
 
 
+}
 }
