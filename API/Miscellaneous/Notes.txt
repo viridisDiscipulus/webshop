@@ -1,0 +1,4 @@
+Slike: https://www.pngwing.com/terms-of-use
+
+Swagger: http://localhost:5000/swagger/index.html
+

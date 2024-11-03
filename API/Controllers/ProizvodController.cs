@@ -1,18 +1,19 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using API.DTOs;
+using API.ErrorTypes;
 using AppDomainModel.Interfaces;
 using AppDomainModel.Model;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 
 namespace API.Controllers
 {   
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProizvodController : ControllerBase
+    public class ProizvodController : BaseApiController
     {
         private readonly IGernericService<Proizvod> _proizvodService;
         private readonly IGernericService<RobnaMarka> _robnaMarkaService;
@@ -28,6 +29,8 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]  
         public async Task<ActionResult<ProizvodPovratniModel>> UcitajProizvod(int id)
         {
             string query = @"
@@ -73,7 +76,7 @@ namespace API.Controllers
 
             if (proizvod == null)
             {
-                return NotFound(); 
+                return NotFound(new ApiResponse(404)); 
             }
 
             var proizvodPovratniModel = _mapper.Map<Proizvod, ProizvodPovratniModel>(proizvod);
@@ -81,10 +84,80 @@ namespace API.Controllers
             return Ok(proizvodPovratniModel);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<ProizvodPovratniModel>>> UcitajSveProizvode()
+        //Zamjenjena novom metodom
+        // [HttpGet("SviProizvodi")]
+        // [ProducesResponseType(StatusCodes.Status200OK)]
+        // [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]  
+        // public async Task<ActionResult<List<ProizvodPovratniModel>>> UcitajSveProizvode()
+        // {
+        //       string query = @"
+        //         SELECT 
+        //             p.Id,
+        //             p.Naziv,
+        //             p.Opis,
+        //             p.Cijena,
+        //             p.SlikaUrl,
+        //             p.VrstaProizvodaID,
+        //             vp.Naziv AS VrstaProizvodaNaziv,
+        //             p.RobnaMarkaID,
+        //             rm.Naziv AS RobnaMarkaNaziv
+        //         FROM 
+        //             Proizvod p
+        //         INNER JOIN 
+        //             VrstaProizvoda vp ON p.VrstaProizvodaID = vp.ID
+        //         INNER JOIN 
+        //             RobnaMarka rm ON p.RobnaMarkaID = rm.ID;";
+
+        //     var proizvodi = await _proizvodService.UcitajSveAsync(query, dr => new Proizvod
+        //     {
+        //         Id = (int)dr["Id"],
+        //         Naziv = (string)dr["Naziv"],
+        //         Opis = (string)dr["Opis"],
+        //         Cijena = (decimal)dr["Cijena"],
+        //         SlikaUrl = (string)dr["SlikaUrl"],
+        //         VrstaProizvodaID = (int)dr["VrstaProizvodaID"],
+        //         VrstaProizvoda = new VrstaProizvoda
+        //         {
+        //             Id = (int)dr["VrstaProizvodaID"],
+        //             Naziv = (string)dr["VrstaProizvodaNaziv"]
+        //         },
+        //         RobnaMarkaID = (int)dr["RobnaMarkaID"],
+        //         RobnaMarka = new RobnaMarka
+        //         {
+        //             Id = (int)dr["RobnaMarkaID"],
+        //             Naziv = (string)dr["RobnaMarkaNaziv"]
+        //         }
+        //     });
+
+        //     if (proizvodi == null)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     return Ok(_mapper.Map<List<Proizvod>, List<ProizvodPovratniModel>>((List<Proizvod>)proizvodi));
+        // }
+
+        [HttpGet("SviProizvodi")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<List<ProizvodPovratniModel>>> UcitajSveProizvode(
+           string sortBy = "Naziv",           // Zadano sortiranje po nazivu
+           string sortOrder = "asc",          // Zadani uzlazni redoslijed
+           int? robnaMarkaID = null,          // Filter po ID-u robne marke
+           int? vrstaProizvodaID = null,      // Filter po ID-u vrste proizvoda
+           int page = 1,                      // Zadani broj stranice
+           int pageSize = 10)                 // Zadana velicina stranice
         {
-              string query = @"
+            // var validSortByFields = new HashSet<string> { "Cijena", "Naziv" };
+            // var validSortOrders = new HashSet<string> { "asc", "desc" };
+
+            // if (!validSortByFields.Contains(sortBy) || !validSortOrders.Contains(sortOrder))
+            // {
+            //     return BadRequest(new ApiResponse(400));
+            // }
+
+           // Osnovni upit
+            var query = new StringBuilder(@"
                 SELECT 
                     p.Id,
                     p.Naziv,
@@ -100,9 +173,39 @@ namespace API.Controllers
                 INNER JOIN 
                     VrstaProizvoda vp ON p.VrstaProizvodaID = vp.ID
                 INNER JOIN 
-                    RobnaMarka rm ON p.RobnaMarkaID = rm.ID;";
+                    RobnaMarka rm ON p.RobnaMarkaID = rm.ID
+                WHERE 1=1"); // 1=1 kao osnovu za pojednostavljenje uvjetnog dodavanja
 
-            var proizvodi = await _proizvodService.UcitajSveAsync(query, dr => new Proizvod
+            // Dinamička primjena filtara
+            if (robnaMarkaID.HasValue)
+            {
+                query.Append($" AND p.RobnaMarkaID = {robnaMarkaID}");
+            }
+            if (vrstaProizvodaID.HasValue)
+            {
+                query.Append($" AND p.VrstaProizvodaID = {vrstaProizvodaID}");
+            }
+
+            // Primijeni sortiranje
+            query.Append($" ORDER BY {sortBy} {(sortOrder == "asc" ? "ASC" : "DESC")}");
+
+            // Izracunavanje pomaka paginacije
+            int offset = (page - 1) * pageSize;
+
+             // Paginacija
+            query.Append($" OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY;");
+
+            // Definiranje parametara upita
+            var parameters = new
+            {
+                RobnaMarkaID = robnaMarkaID,
+                VrstaProizvodaID = vrstaProizvodaID,
+                Offset = offset,
+                PageSize = pageSize
+            };
+
+            // Izvrsavanje upit s parametrima za filtriranje i oznacavanje stranica
+            var proizvodi = await _proizvodService.UcitajSveAsync(query.ToString(), dr => new Proizvod
             {
                 Id = (int)dr["Id"],
                 Naziv = (string)dr["Naziv"],
@@ -128,8 +231,10 @@ namespace API.Controllers
                 return NotFound();
             }
 
+            // Mapiranje i vracanje paginiranog i sortiranog popisa
             return Ok(_mapper.Map<List<Proizvod>, List<ProizvodPovratniModel>>((List<Proizvod>)proizvodi));
         }
+
 
         // [HttpPost]
         // public IActionResult SnimiProizvod([FromBody] Proizvod proizvod)
@@ -157,6 +262,8 @@ namespace API.Controllers
         // }
 
         [HttpGet("robneMarke")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]  
         public async Task<ActionResult<List<RobnaMarka>>> UcitajSveRobneMarke()
         {
              string query = @"
@@ -180,7 +287,9 @@ namespace API.Controllers
             return Ok(robnaMarka);
         }
 
-       [HttpGet("vrsteProizvoda")]
+        [HttpGet("vrsteProizvoda")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]  
         public async Task<ActionResult<List<VrstaProizvoda>>> UcitajSveVrsteProizvoda()
         {
            string query = @"
