@@ -28,8 +28,17 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped(typeof(IGernericService<>), typeof(GenericService<>));                      
-           services.AddScoped(typeof(IGernericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped(typeof(IGernericRepository<>), typeof(GenericRepository<>));
             services.AddAutoMapper(typeof(ProfiliZaMappiranje));
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder.WithOrigins("http://localhost:4200") // Promijeniti ovo u URL Angular aplikacije
+                                    .AllowAnyMethod()
+                                    .AllowAnyHeader());
+            });
+
             services.AddControllers();
 
             services.AddApplicationServices();
@@ -53,6 +62,9 @@ namespace API
             app.UseRouting();
 
             app.UseStaticFiles();
+
+             // Enable CORS
+            app.UseCors("AllowSpecificOrigin");
 
             app.UseAuthorization();
 
