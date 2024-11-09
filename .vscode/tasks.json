@@ -1,41 +1,46 @@
 {
     "version": "2.0.0",
     "tasks": [
-        {
-            "label": "build",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/MalaSapaWebShop.sln",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary;ForceNoAlign"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "publish",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "publish",
-                "${workspaceFolder}/MalaSapaWebShop.sln",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary;ForceNoAlign"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "watch",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "watch",
-                "run",
-                "--project",
-                "${workspaceFolder}/MalaSapaWebShop.sln"
-            ],
-            "problemMatcher": "$msCompile"
+      {
+        "label": "build API",
+        "command": "dotnet",
+        "type": "process",
+        "args": ["build"],
+        "problemMatcher": "$msCompile",
+        "group": "build",
+        "options": {
+          "cwd": "${workspaceFolder}/API"
         }
+      },
+      {
+        "label": "build Angular",
+        "command": "ng",
+        "type": "shell",
+        "args": ["serve"],
+        "isBackground": true,
+        "problemMatcher": {
+          "owner": "typescript",
+          "source": "ts",
+          "applyTo": "closedDocuments",
+          "fileLocation": ["relative", "${workspaceFolder}"],
+          "pattern": {
+            "regexp": "^(.*?)\\((\\d+),(\\d+)\\):\\s+(.*)$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "message": 4
+          },
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": ".*\\[ng serve\\].*",
+            "endsPattern": ".*Compiled successfully.*"
+          }
+        },
+        "group": "build",
+        "options": {
+          "cwd": "${workspaceFolder}/mala-sapa-webshop-frontend"
+        }
+      }
     ]
-}
+  }
+  

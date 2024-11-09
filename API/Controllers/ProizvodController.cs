@@ -84,78 +84,16 @@ namespace API.Controllers
             return Ok(proizvodPovratniModel);
         }
 
-        //Zamjenjena novom metodom
-        // [HttpGet("SviProizvodi")]
-        // [ProducesResponseType(StatusCodes.Status200OK)]
-        // [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]  
-        // public async Task<ActionResult<List<ProizvodPovratniModel>>> UcitajSveProizvode()
-        // {
-        //       string query = @"
-        //         SELECT 
-        //             p.Id,
-        //             p.Naziv,
-        //             p.Opis,
-        //             p.Cijena,
-        //             p.SlikaUrl,
-        //             p.VrstaProizvodaID,
-        //             vp.Naziv AS VrstaProizvodaNaziv,
-        //             p.RobnaMarkaID,
-        //             rm.Naziv AS RobnaMarkaNaziv
-        //         FROM 
-        //             Proizvod p
-        //         INNER JOIN 
-        //             VrstaProizvoda vp ON p.VrstaProizvodaID = vp.ID
-        //         INNER JOIN 
-        //             RobnaMarka rm ON p.RobnaMarkaID = rm.ID;";
-
-        //     var proizvodi = await _proizvodService.UcitajSveAsync(query, dr => new Proizvod
-        //     {
-        //         Id = (int)dr["Id"],
-        //         Naziv = (string)dr["Naziv"],
-        //         Opis = (string)dr["Opis"],
-        //         Cijena = (decimal)dr["Cijena"],
-        //         SlikaUrl = (string)dr["SlikaUrl"],
-        //         VrstaProizvodaID = (int)dr["VrstaProizvodaID"],
-        //         VrstaProizvoda = new VrstaProizvoda
-        //         {
-        //             Id = (int)dr["VrstaProizvodaID"],
-        //             Naziv = (string)dr["VrstaProizvodaNaziv"]
-        //         },
-        //         RobnaMarkaID = (int)dr["RobnaMarkaID"],
-        //         RobnaMarka = new RobnaMarka
-        //         {
-        //             Id = (int)dr["RobnaMarkaID"],
-        //             Naziv = (string)dr["RobnaMarkaNaziv"]
-        //         }
-        //     });
-
-        //     if (proizvodi == null)
-        //     {
-        //         return NotFound();
-        //     }
-
-        //     return Ok(_mapper.Map<List<Proizvod>, List<ProizvodPovratniModel>>((List<Proizvod>)proizvodi));
-        // }
-
         [HttpGet("SviProizvodi")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<ProizvodPovratniModel>>> UcitajSveProizvode(
-           string sortBy = "Naziv",           // Zadano sortiranje po nazivu
-           string sortOrder = "asc",          // Zadani uzlazni redoslijed
-           int? robnaMarkaID = null,          // Filter po ID-u robne marke
-           int? vrstaProizvodaID = null,      // Filter po ID-u vrste proizvoda
-           int page = 1,                      // Zadani broj stranice
-           int pageSize = 10)                 // Zadana velicina stranice
+           string sortiranje = "Naziv",           
+           int? robnaMarkaID = null,          
+           int? vrstaProizvodaID = null,
+           string pretraga = null)
+      
         {
-            // var validSortByFields = new HashSet<string> { "Cijena", "Naziv" };
-            // var validSortOrders = new HashSet<string> { "asc", "desc" };
-
-            // if (!validSortByFields.Contains(sortBy) || !validSortOrders.Contains(sortOrder))
-            // {
-            //     return BadRequest(new ApiResponse(400));
-            // }
-
            // Osnovni upit
             var query = new StringBuilder(@"
                 SELECT 
@@ -174,9 +112,8 @@ namespace API.Controllers
                     VrstaProizvoda vp ON p.VrstaProizvodaID = vp.ID
                 INNER JOIN 
                     RobnaMarka rm ON p.RobnaMarkaID = rm.ID
-                WHERE 1=1"); // 1=1 kao osnovu za pojednostavljenje uvjetnog dodavanja
+                WHERE 1=1"); 
 
-            // Dinamička primjena filtara
             if (robnaMarkaID.HasValue)
             {
                 query.Append($" AND p.RobnaMarkaID = {robnaMarkaID}");
@@ -185,24 +122,13 @@ namespace API.Controllers
             {
                 query.Append($" AND p.VrstaProizvodaID = {vrstaProizvodaID}");
             }
-
-            // Primijeni sortiranje
-            query.Append($" ORDER BY {sortBy} {(sortOrder == "asc" ? "ASC" : "DESC")}");
-
-            // Izracunavanje pomaka paginacije
-            int offset = (page - 1) * pageSize;
-
-             // Paginacija
-            query.Append($" OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY;");
-
-            // Definiranje parametara upita
-            var parameters = new
+            if (!string.IsNullOrEmpty(pretraga))
             {
-                RobnaMarkaID = robnaMarkaID,
-                VrstaProizvodaID = vrstaProizvodaID,
-                Offset = offset,
-                PageSize = pageSize
-            };
+                query.Append($" AND p.Naziv LIKE '%{pretraga}%'");
+            }
+
+
+            query.Append($" ORDER BY {sortiranje}");
 
             // Izvrsavanje upit s parametrima za filtriranje i oznacavanje stranica
             var proizvodi = await _proizvodService.UcitajSveAsync(query.ToString(), dr => new Proizvod
@@ -231,10 +157,8 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            // Mapiranje i vracanje paginiranog i sortiranog popisa
             return Ok(_mapper.Map<List<Proizvod>, List<ProizvodPovratniModel>>((List<Proizvod>)proizvodi));
         }
-
 
         // [HttpPost]
         // public IActionResult SnimiProizvod([FromBody] Proizvod proizvod)
@@ -273,7 +197,7 @@ namespace API.Controllers
                 FROM 
                     RobnaMarka;";
 
-            var robnaMarka = await _robnaMarkaService.UcitajPoIdAsync(query, dr => new RobnaMarka
+            var robnaMarka = await _robnaMarkaService.UcitajSveAsync(query, dr => new RobnaMarka
             {
                 Id = (int)dr["Id"],
                 Naziv = (string)dr["Naziv"]
@@ -299,7 +223,7 @@ namespace API.Controllers
                 FROM 
                     VrstaProizvoda;";
 
-            var vrstaProizvoda = await _vrstaProizvodaService.UcitajPoIdAsync(query, dr => new VrstaProizvoda
+            var vrstaProizvoda = await _vrstaProizvodaService.UcitajSveAsync(query, dr => new VrstaProizvoda
             {
                 Id = (int)dr["Id"],
                 Naziv = (string)dr["Naziv"]
