@@ -1,7 +1,7 @@
 <div class="card h-100 shadow-lg">
     <img src="{{proizvod.slikaUrl}}" alt="{{proizvod.naziv}}" class="img-fluid">
     <div class="card-body d-flex flex-column">
-        <a href="#">
+        <a routerLink="/webshop/{{proizvod.id}}">
             <h6 class="text-uppercase">{{proizvod.naziv}}</h6>
         </a>
         <span class="mb-2">{{proizvod.cijena | currency}}</span>
@@ -10,7 +10,7 @@
             <button type="button" class="btn btn-outline-secondary">
                 <i class="fa fa-shopping-cart mr-2"></i>
             </button>
-            <button type="button" class="btn btn-outline-secondary">Pregledaj</button>
+            <button routerLink="/webshop/{{proizvod.id}}" type="button" class="btn btn-outline-secondary">Pregledaj</button>
         </div>
     </div>
 </div>

@@ -5,13 +5,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core/core.module';
-import { WebshopModule } from './webshop/webshop.module';
-
-
+import { PocetnaModule } from './pocetna/pocetna.module';
+  
 @NgModule({
   declarations: [
     AppComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -19,7 +17,7 @@ import { WebshopModule } from './webshop/webshop.module';
     BrowserAnimationsModule,
     HttpClientModule,
     CoreModule,
-    WebshopModule
+    PocetnaModule
 ],
   providers: [],
   bootstrap: [AppComponent]

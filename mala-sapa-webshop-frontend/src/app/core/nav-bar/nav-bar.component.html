@@ -1,14 +1,14 @@
 <div class="d-flex flex-row align-items-center justify-content-between p-3 px-4 mb-3 
-    border-bottom fixed-top shadow-sm white-text" style="background-color: #55404f;">
+    border-bottom fixed-top shadow-sm" style="background-color: #55404f;">
     <!-- <img src="/assets/slike/logo.png" alt="logo" style="max-height: 70px;"> -->
     <h1 class="m-0 display-5">
-        <img src="/assets/slike/logo.png" alt="logo" aria-label="Logo" style="max-height: 70px;">
+        <img src="/assets/slike/logo.png" alt="logo" aria-label="Logo" class="logo" routerLink="/" style="max-height: 70px;">
         <span class="moji-naslovi" style="color: #FE17BD; font-weight: 600; margin-left: 1rem;">Mala Šapa</span>
       </h1>
     <nav class="my-2 my-md-0 mr-md-3 text-uppercase fs-4">
-        <a class="p-2 text-decoration-none" href="#">Početna</a>
-        <a class="p-2 text-decoration-none" href="#">Trgovina</a>
-        <a class="p-2 text-decoration-none" href="#">Kontakt</a>
+        <a class="p-2" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Početna</a>
+        <a class="p-2" routerLink="/webshop" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Trgovina</a>
+        <!-- <a class="p-2" routerLink="['/routePath']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Kontakt</a> -->
     </nav>
     <div class="d-flex align-items-center">
         <div class="position-relative me-3 order-1" style="margin-right: 20px;">

@@ -40,6 +40,12 @@ export class WebshopService {
     )
   }
 
+  ucitajProizvod(id: number) {
+    let proizvod: any;
+    proizvod = this.http.get<IProizvod>(this.baseUrl + 'Proizvod/' + id);
+    return proizvod;
+  }
+
   ucitajSveRobneMarke() {
     return this.http.get<IRobnaMarka[]>(this.baseUrl + 'Proizvod/RobneMarke');
   }

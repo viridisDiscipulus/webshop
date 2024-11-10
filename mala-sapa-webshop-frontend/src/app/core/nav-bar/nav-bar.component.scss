@@ -13,6 +13,15 @@
     font-size: 12px;
 }
 
-.white-text * {
+a {
     color: white;
+    text-decoration: none;
+    
+    &.active {
+        color: #FE17BD;
+    } 
+}
+
+.logo {
+    cursor: pointer;
 }
