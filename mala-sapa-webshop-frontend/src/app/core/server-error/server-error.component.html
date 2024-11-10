@@ -1,0 +1,15 @@
+<div class="container mt-5" *ngIf="error">
+    <h4>Internal Server Error - osvježavanjem stranice iznimka će nestati</h4>
+<h5 class="text-danger">Error: {{error.poruka}}</h5>
+<p class="font-weight-bold">Napomena: ako ovo vidite onda Angular vjerojatno nije odgovoran </p>
+<p>Što učiniti?</p>
+<ol>
+    <li>Otvorite dev tools preglednika</li>
+    <li>Provjerite networks tab</li>
+    <li>Provjeriti neuspjeli zahtjev</li>
+    <li>pregledajte ovaj url zahtjeva - provjerite je li točan</li>
+    <li>Reproducirajte pogrešku u Postmanu - ako imamo isti odgovor u Postmanu, onda problem NIJE u Angularu</li>
+</ol>
+<p>Followig is the stack trace - this is where your investigatin should start!</p>
+<code class="mt-5" style="background-color: whitesmoke;"> {{error.opis}}</code>
+</div>
