@@ -6,13 +6,13 @@ import { ServerErrorComponent } from './core/server-error/server-error.component
 import { NotFoundComponent } from './core/not-found/not-found.component';
 
 const routes: Routes = [
-  {path: '', component: PocetnaComponent },
+  {path: '', component: PocetnaComponent, data: {breadcrumb: 'Početna'}},
+  {path: 'test-error', component: TestErrorComponent, data: {breadcrumb: 'Test Errors'}},
+  {path: 'server-error', component: ServerErrorComponent, data: {breadcrumb: 'Server Errors'}},
+  {path: 'not-found', component: NotFoundComponent, data: {breadcrumb: 'Not Found'}},
+  {path: 'webshop', loadChildren: () => import('./webshop/webshop.module').then(m => m.WebshopModule), data: {breadcrumb: 'Webshop'}},
   {path: 'test-error', component: TestErrorComponent },
-  {path: 'server-error', component: ServerErrorComponent },
-  {path: 'not-found', component: NotFoundComponent },
-  {path: 'webshop', loadChildren: () => import('./webshop/webshop.module').then(m => m.WebshopModule)},
-  {path: 'test-error', component: TestErrorComponent },
-  {path: '**', redirectTo: '', pathMatch: 'full'}
+  {path: '**', redirectTo: 'Nije pronađeno', pathMatch: 'full'}
 ];
 
 @NgModule({

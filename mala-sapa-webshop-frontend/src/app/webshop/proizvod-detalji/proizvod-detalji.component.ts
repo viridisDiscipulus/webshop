@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IProizvod } from 'src/app/shared/models/proizvodi';
 import { WebshopService } from '../webshop.service';
 import { ActivatedRoute } from '@angular/router';
+import { BreadcrumbService } from 'xng-breadcrumb';
 
 @Component({
   selector: 'app-proizvod-detalji',
@@ -11,7 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ProizvodDetaljiComponent implements OnInit {
   proizvod: IProizvod;
 
-  constructor(private webShopService: WebshopService, private route: ActivatedRoute ) { }
+  constructor(private webShopService: WebshopService, private route: ActivatedRoute, private bcService: BreadcrumbService) { }
 
   ngOnInit(): void {
     this.ucitajProizvod();
@@ -20,6 +21,8 @@ export class ProizvodDetaljiComponent implements OnInit {
   ucitajProizvod() {
     this.webShopService.ucitajProizvod(+this.route.snapshot.paramMap.get('id')).subscribe(proizvod => {
       this.proizvod = proizvod;
+      console.log('Proizvod Naziv:', proizvod.naziv);
+      this.bcService.set('@proizvodDetalji', proizvod.naziv);
     }, error => {
       console.log(error);
     });

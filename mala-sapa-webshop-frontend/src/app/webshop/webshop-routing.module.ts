@@ -7,7 +7,7 @@ import { SharedModule } from '../shared/shared.module';
 
 const routes: Routes = [
   {path: '', component: WebshopComponent},
-  {path: ':id', component: ProizvodDetaljiComponent}
+  {path: ':id', component: ProizvodDetaljiComponent, data: {breadcrumb: {alias: 'proizvodDetalji'}}}
 ];
 
 @NgModule({
