@@ -2,29 +2,31 @@
     <div class="row">
         <!--Sidebar-->
         <section class="col-3">
-            <h5 style="color: #fe17bd; font-weight: 600">Sortiraj</h5>
-            <select class="custom-select mb-3" (change)="onSortiranjeSelected($event.target.value)">
-                <option *ngFor="let opcija of opcijeSortiranja"
-                    [value]="opcija.value"> {{ opcija.name }}
-                </option>
-            </select>
+            <ng-container *ngIf="vrsteProizvoda && robneMarke">
+                <h5 style="color: #fe17bd; font-weight: 600">Sortiraj</h5>
+                <select class="custom-select mb-3" (change)="onSortiranjeSelected($event.target.value)">
+                    <option *ngFor="let opcija of opcijeSortiranja" [value]="opcija.value">
+                        {{ opcija.name }}
+                    </option>
+                </select>
 
-            <h5 style="color: #fe17bd; font-weight: 600">Robne marke</h5>
-            <ul class="list-group my-3">
-                <li class="list-group-item" *ngFor="let marka of robneMarke"
-                    [class.active]="marka.id === parametri.robnaMarkaId" [value]="marka.id"
-                    (click)="onRobnaMarkaSelected(marka.id)">
-                    {{ marka.naziv }}
-                </li>
-            </ul>
-            <h5 style="color: #fe17bd; font-weight: 600">Vrste proizvoda</h5>
-            <ul class="list-group my-3">
-                <li class="list-group-item" *ngFor="let vrsta of vrsteProizvoda"
-                    [class.active]="vrsta.id === parametri.vrstaProizvodaId" [value]="vrsta.id"
-                    (click)="onVrstaProizvodaSelected(vrsta.id)">
-                    {{ vrsta.naziv }}
-                </li>
-            </ul>
+                <h5 style="color: #fe17bd; font-weight: 600">Robne marke</h5>
+                <ul class="list-group my-3">
+                    <li class="list-group-item" *ngFor="let marka of robneMarke"
+                        [class.active]="marka.id === parametri.robnaMarkaId" [value]="marka.id"
+                        (click)="onRobnaMarkaSelected(marka.id)">
+                        {{ marka.naziv }}
+                    </li>
+                </ul>
+                <h5 style="color: #fe17bd; font-weight: 600">Vrste proizvoda</h5>
+                <ul class="list-group my-3">
+                    <li class="list-group-item" *ngFor="let vrsta of vrsteProizvoda"
+                        [class.active]="vrsta.id === parametri.vrstaProizvodaId" [value]="vrsta.id"
+                        (click)="onVrstaProizvodaSelected(vrsta.id)">
+                        {{ vrsta.naziv }}
+                    </li>
+                </ul>
+            </ng-container>
         </section>
         <!--Sidebar-->
 
@@ -32,12 +34,11 @@
         <section class="col-9">
             <div class="d-flex justify-content-between align-items-center pb-2">
                 <header>
-                    <span>   
-                    </span>
+                    <span> </span>
                 </header>
-                <div class="form-inline mt-2">
-                    <input (keyup.enter)="onPretrazi()" class="form-control" style="width: 200px; margin-right: 0.4rem" type="text" #pretrazi
-                        placeholder="Pretraži" aria-label="Pretraži" />
+                <div class="form-inline mt-2" *ngIf="proizvodi">
+                    <input (keyup.enter)="onPretrazi()" class="form-control" style="width: 200px; margin-right: 0.4rem"
+                        type="text" #pretrazi placeholder="Pretraži" aria-label="Pretraži" />
                     <button (click)="onPretrazi()" class="btn btn-outline" style="
               background-color: #a9488d;
               color: white;
@@ -45,7 +46,8 @@
             ">
                         Pretraži
                     </button>
-                    <button (click)="onPonisti()" class="btn btn-outline my-2" style="background-color: #332d31; color: white">
+                    <button (click)="onPonisti()" class="btn btn-outline my-2"
+                        style="background-color: #332d31; color: white">
                         Poništi
                     </button>
                 </div>

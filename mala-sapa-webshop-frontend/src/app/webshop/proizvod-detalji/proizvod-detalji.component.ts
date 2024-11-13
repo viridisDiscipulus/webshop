@@ -12,7 +12,11 @@ import { BreadcrumbService } from 'xng-breadcrumb';
 export class ProizvodDetaljiComponent implements OnInit {
   proizvod: IProizvod;
 
-  constructor(private webShopService: WebshopService, private route: ActivatedRoute, private bcService: BreadcrumbService) { }
+  constructor(private webShopService: WebshopService, private route: ActivatedRoute, private bcService: BreadcrumbService) {
+    this.bcService.set('@proizvodDetalji', '');
+   }
+
+
 
   ngOnInit(): void {
     this.ucitajProizvod();

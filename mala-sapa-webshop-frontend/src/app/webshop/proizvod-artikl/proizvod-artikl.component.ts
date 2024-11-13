@@ -5,7 +5,7 @@ import { IProizvod } from 'src/app/shared/models/proizvodi';
 @Component({
   selector: 'app-proizvod-artikl',
   templateUrl: './proizvod-artikl.component.html',
-  styleUrls: ['./proizvod-artikl.component.scss']
+  styleUrls: ['./proizvod-artikl.component.scss' ]
 })
 export class ProizvodArtiklComponent implements OnInit {
   @Input() proizvod: IProizvod;
