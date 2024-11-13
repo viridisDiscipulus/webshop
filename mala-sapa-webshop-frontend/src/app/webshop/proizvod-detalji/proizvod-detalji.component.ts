@@ -16,8 +16,6 @@ export class ProizvodDetaljiComponent implements OnInit {
     this.bcService.set('@proizvodDetalji', '');
    }
 
-
-
   ngOnInit(): void {
     this.ucitajProizvod();
   }

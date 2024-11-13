@@ -14,15 +14,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Services;
+using StackExchange.Redis;
 
 namespace API
 {
     public class Startup
     {
-        private readonly IConfiguration _conf;
+        private readonly IConfiguration _config;
         public Startup(IConfiguration configuration)
         {
-            _conf = configuration;
+            _config = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -40,6 +41,12 @@ namespace API
             });
 
             services.AddControllers();
+
+            services.AddSingleton<ConnectionMultiplexer>(c => {
+                var configuration = ConfigurationOptions.Parse(_config
+                    .GetConnectionString("Redis"), true);
+                return ConnectionMultiplexer.Connect(configuration);
+            });
 
             services.AddApplicationServices();
             services.AddSwaggerDocumentation();

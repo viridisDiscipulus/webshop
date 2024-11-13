@@ -15,9 +15,9 @@ namespace API.Extensions
             services.AddScoped<IProizvodRepository, ProizvodRepository>();
             services.AddScoped<IProizvodService, ProizvodService>();
             
-            services.Configure<ApiBehaviorOptions>(optinos =>
+            services.Configure<ApiBehaviorOptions>(options =>
             {
-                optinos.InvalidModelStateResponseFactory = actionContext =>
+                options.InvalidModelStateResponseFactory = actionContext =>
                 {
                     var errors = actionContext.ModelState
                         .Where(e => e.Value.Errors.Count > 0)
