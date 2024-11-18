@@ -23,7 +23,7 @@ export class ProizvodDetaljiComponent implements OnInit {
   ucitajProizvod() {
     this.webShopService.ucitajProizvod(+this.route.snapshot.paramMap.get('id')).subscribe(proizvod => {
       this.proizvod = proizvod;
-      console.log('Proizvod Naziv:', proizvod.naziv);
+      // console.log('Proizvod Naziv:', proizvod.naziv);
       this.bcService.set('@proizvodDetalji', proizvod.naziv);
     }, error => {
       console.log(error);

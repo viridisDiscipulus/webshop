@@ -1,6 +1,4 @@
-using System.Linq;
 using Api.Extensions;
-using API.ErrorTypes;
 using API.Extensions;
 using API.Middleware;
 using API.Miscellaneous;
@@ -9,10 +7,8 @@ using AutoMapper;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
 using Services;
 using StackExchange.Redis;
 
@@ -35,16 +31,15 @@ namespace API
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins("http://localhost:4200") // Promijeniti ovo u URL Angular aplikacije
+                    builder => builder.WithOrigins("http://localhost:4200") // URL Angular aplikacije
                                     .AllowAnyMethod()
                                     .AllowAnyHeader());
             });
 
             services.AddControllers();
-
-            services.AddSingleton<ConnectionMultiplexer>(c => {
-                var configuration = ConfigurationOptions.Parse(_config
-                    .GetConnectionString("Redis"), true);
+            
+            services.AddSingleton<IConnectionMultiplexer>(c => {
+                var configuration = ConfigurationOptions.Parse(_config.GetConnectionString("Redis"), true);
                 return ConnectionMultiplexer.Connect(configuration);
             });
 

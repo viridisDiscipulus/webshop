@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
       {
-        "label": "build API",
+        "label": "build",
         "command": "dotnet",
         "type": "process",
         "args": ["build"],
@@ -13,7 +13,7 @@
         }
       },
       {
-        "label": "build Angular",
+        "label": "build",
         "command": "ng",
         "type": "shell",
         "args": ["serve"],

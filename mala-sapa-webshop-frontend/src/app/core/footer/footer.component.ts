@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FooterVisibilityService } from '../services/footer-visibility.service';
 
 @Component({
   selector: 'app-footer',
@@ -6,11 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
-  isVisible: boolean;
+  vidljivostModula = false;
 
-  constructor() { }
+  constructor(private footerVisibilityService: FooterVisibilityService) { }
 
   ngOnInit(): void {
+  //Subscribe na stanje vidljivosti
+    this.footerVisibilityService.vidljivost$.subscribe(vidljivost => {
+      this.vidljivostModula = vidljivost;
+    });
   }
 
 }

@@ -14,7 +14,7 @@ namespace API.Extensions
         {
             services.AddScoped<IProizvodRepository, ProizvodRepository>();
             services.AddScoped<IProizvodService, ProizvodService>();
-            
+            services.AddScoped<IKosaricaRepository, KosaricaRepository>();
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = actionContext =>

@@ -4,6 +4,7 @@ import { WebshopService } from './webshop.service';
 import { IRobnaMarka } from '../shared/models/robnaMarka';
 import { IVrstaProizvoda } from '../shared/models/vrstaProizvoda';
 import { WebshopParametri } from '../shared/models/webshopParametri';
+import { FooterVisibilityService } from '../core/services/footer-visibility.service';
 
 @Component({
   selector: 'app-webshop',
@@ -26,13 +27,19 @@ export class WebshopComponent implements OnInit {
     {name: 'S nižom cijenom', value: 'cijena asc'}
   ];
 
-  constructor(private webShopService: WebshopService) { }
+  constructor(private webShopService: WebshopService, private footerVisibilityService: FooterVisibilityService) { }
 
   ngOnInit(): void {
-   this.ucitajProizvode();
-    this.ucitajRobneMarke();
-    this.ucitajVrsteProizvoda(); 
+      this.ucitajProizvode();
+      this.ucitajRobneMarke();
+      this.ucitajVrsteProizvoda();
   }
+
+  // ngAfterViewInit() {
+  //     // Nakon sto se ucitaju svi podaci, prikazi podnozje
+  //     this.footerVisibilityService.setVidljivost(true);   
+  // }
+
 
   ucitajProizvode() {
     this.webShopService.ucitajSveProizvode(this.parametri).subscribe(response => {
@@ -53,6 +60,7 @@ export class WebshopComponent implements OnInit {
   ucitajVrsteProizvoda() {
     this.webShopService.ucitajSveVrsteProizvoda().subscribe(response => {
       this.vrsteProizvoda = [{id: 0, naziv: 'All'}, ...response];
+
     }, error => {
       console.log(error);
     });
