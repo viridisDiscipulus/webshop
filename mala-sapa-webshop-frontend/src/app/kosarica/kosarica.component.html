@@ -1,0 +1,85 @@
+
+<div class="container mt-5">
+    <div *ngIf="(kosarica$ | async) === null">
+        <p>U vašoj košarici nema artikala</p>
+    </div>
+    
+    <div *ngIf="kosarica$ | async">
+        <div class="pb-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 py-5 mb-1">
+                        <div class="table-response">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="border-0 bg-light" scope="col">
+                                            <div class="p-2 px-3 text-uppercase">Proizvod</div>
+                                        </th>
+                                        <th scope="col" class="border-0 bg-light">
+                                            <div class="py-2 text-uppercase">Cijena</div>
+                                        </th>
+                                        <th scope="col" class="border-0 bg-light">
+                                            <div class="py-2 text-uppercase">Količina</div>
+                                        </th>
+                                        <th scope="col" class="border-0 bg-light">
+                                            <div class="py-2 text-uppercase">Ukupno</div>
+                                        </th>   
+                                        <th scope="col" class="border-0 bg-light">
+                                            <div class="py-2 text-uppercase">Uklonite proizvod</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let artikl of (kosarica$ | async).artikli">
+                                        <th scope="row">
+                                            <div class="p-2">
+                                                <img src="{{artikl.slikaUrl}}" alt="{{artikl.proizvodNaziv}}" class="img-fluid" style="max-height: 50px ;">
+                                                <div class="ml-3 d-inline-block align-middle">
+                                                    <h5 class="mb-0">
+                                                        <a routerLink="/webshop/{{artikl.id}}" class="text-dark">{{artikl.proizvodNaziv}}</a>
+                                                    </h5>
+                                                    <span class="text-muted font-weight-normal font-italic d-block">Vrsta proizvoda: {{artikl.vrstaProizvoda}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <td class="align-middle">
+                                            <strong>{{artikl.cijena | currency: 'EUR'}}</strong>
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="d-felx aling-items-center">
+                                                <i (click)="umanjiKolicinuArtikla(artikl)" class="fa fa-minus-circle text-warning mr-2" style="cursor: pointer; font-size: 2em;"></i>
+                                                    <span class="font-weight-bold" style="font-size: 1.5em;">
+                                                        {{artikl.kolicina}}
+                                                    </span>
+                                                <i (click)="uvecajKolicinuArtikla(artikl)" class="fa fa-plus-circle text-warning mx-2" style="cursor: pointer; font-size: 2em;"></i>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle">
+                                            <strong>{{artikl.cijena * artikl.kolicina | currency: 'EUR'}}</strong>
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <a class="text-danger">
+                                                <i (click)="ukloniArtiklIzKosarice(artikl)" class="fa fa-trash" style="font-size: 2em; cursor: pointer;"></i>
+                                            </a>
+                                        </td>
+                                    </tr>    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6 offset-6">
+                        <app-narudzba-suma></app-narudzba-suma>
+                        <a routerLink="/blagajna/" class="btn btn-outline.primary py-2 btn-block" style="background-color: #FE17BD; color:white; cursor: pointer;">
+                            Nastavite na plaćanje
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

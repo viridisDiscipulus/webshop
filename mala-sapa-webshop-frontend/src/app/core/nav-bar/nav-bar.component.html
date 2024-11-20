@@ -11,9 +11,9 @@
     </nav>
     <div class="d-flex align-items-center">
         <div class="position-relative me-3 order-1" style="margin-right: 20px;">
-            <a>
+            <a routerLink="/kosarica">
                 <i class="fa fa-shopping-cart fa-1x" style="color: #FE17BD;"></i>
-                <div class="broj-kosarice">2</div>
+                <div *ngIf="(kosarica$ | async) as kosarica" class="broj-kosarice">{{kosarica.artikli.length}}</div>
             </a>
         </div>
         <div class="order-2">

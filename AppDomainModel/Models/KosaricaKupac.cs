@@ -22,7 +22,7 @@ namespace AppDomainModel.Models
 
         #region Properties
         public string Id { get => id; set => id = value; }
-        public List<KosaricaStavka> Stavke { get; set; } = new List<KosaricaStavka>();
+        public List<KosaricaArtikl> Artikli { get; set; } = new List<KosaricaArtikl>();
         #endregion    
     }
 }

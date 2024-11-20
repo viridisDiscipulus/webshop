@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { KosaricaService } from 'src/app/kosarica/kosarica.service';
 import { IProizvod } from 'src/app/shared/models/proizvodi';
 
 
@@ -10,9 +11,13 @@ import { IProizvod } from 'src/app/shared/models/proizvodi';
 export class ProizvodArtiklComponent implements OnInit {
   @Input() proizvod: IProizvod;
   
-  constructor() { }
+  constructor(private kosaricaService: KosaricaService) { }
 
   ngOnInit(): void {
+  }
+
+  dodajUKosaricu() {
+    this.kosaricaService.dodajArtiklUKosaricu(this.proizvod);
   }
 
 }

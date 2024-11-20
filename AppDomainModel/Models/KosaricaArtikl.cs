@@ -2,7 +2,7 @@ using AppDomainModel.Model;
 
 namespace AppDomainModel.Models
 {
-    public class KosaricaStavka : BaseModel
+    public class KosaricaArtikl : BaseModel
     {
         public string ProizvodNaziv { get; set; }
         public decimal Cijena { get; set; }
