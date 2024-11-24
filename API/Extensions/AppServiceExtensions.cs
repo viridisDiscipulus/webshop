@@ -2,6 +2,7 @@ using System.Linq;
 using API.ErrorTypes;
 using AppDomainModel.Interfaces;
 using DataAccess.Repositories;
+using DataAccess.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Services;
@@ -15,6 +16,9 @@ namespace API.Extensions
             services.AddScoped<IProizvodRepository, ProizvodRepository>();
             services.AddScoped<IProizvodService, ProizvodService>();
             services.AddScoped<IKosaricaRepository, KosaricaRepository>();
+            services.AddTransient<IKorisnikRepository, KorisnikRepository>();
+            services.AddTransient<IKorisnikService, KorisnikService>();
+            services.AddTransient<ITokenService, TokenService>();
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = actionContext =>

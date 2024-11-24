@@ -1,4 +1,6 @@
+using API.DTOs;
 using AppDomainModel.Model;
+using AppDomainModel.Models.Identity;
 using AutoMapper;
 
 namespace API.Miscellaneous
@@ -7,10 +9,13 @@ namespace API.Miscellaneous
     {
       public ProfiliZaMappiranje()
       {
-        CreateMap<Proizvod, DTOs.ProizvodPovratniModel>()
+        CreateMap<Proizvod, ProizvodPovratniModel>()
             .ForMember(d => d.VrstaProizvoda, o => o.MapFrom(s => s.VrstaProizvoda.Naziv))
             .ForMember(d => d.RobnaMarka, o => o.MapFrom(s => s.RobnaMarka.Naziv))
             .ForMember(d => d.SlikaUrl, o => o.MapFrom<URLUpravitelj>());
+
+        CreateMap<Adresa, AdresaPovratniModel>();
+        CreateMap<AdresaPovratniModel, Adresa>();
       }
     }
 }

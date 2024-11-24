@@ -1,5 +1,7 @@
+using System.Data;
 using API.ErrorTypes;
 using AppDomainModel.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -10,11 +12,18 @@ namespace API.Controllers
     {
        private readonly string _connectionString;
 
-        public BugController(IConfiguration configuration)
+        public BugController(IDbConnection connection)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _connectionString = connection.ConnectionString;
         }
 
+        [HttpGet("testauth")]
+        [Authorize]
+        public ActionResult<string> GetSecretText()
+        {
+            return "secret stuff";
+        }
+        
         [HttpGet("notfound")]
         public ActionResult GetNotFoundError()
         {

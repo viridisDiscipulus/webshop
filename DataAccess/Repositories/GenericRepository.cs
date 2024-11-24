@@ -1,27 +1,27 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using AppDomainModel.Interfaces;
 using AppDomainModel.Model;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Repositories
 {
     public class GenericRepository<T> : IGernericRepository<T> where T : BaseModel
     {
-        private readonly IConfiguration _configuration;
+        private readonly string _connectionString;
 
-        public GenericRepository(IConfiguration configuration)
+        public GenericRepository(IDbConnection connection)
         {
-            _configuration = configuration;
+            _connectionString = connection.ConnectionString;
         }
 
         public async Task<T> UcitajPoIdAsync(string query, Func<SqlDataReader, T> mapFunction, params SqlParameter[] parameters)
         {
              T item = default;
 
-        using (SqlConnection con = new SqlConnection(_configuration.GetConnectionString      ("DefaultConnection")))
+        using (SqlConnection con = new SqlConnection(_connectionString))
         {
             await con.OpenAsync();
 
@@ -44,7 +44,7 @@ namespace DataAccess.Repositories
         {
             List<T> items = new List<T>();
 
-            using (SqlConnection con = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 await con.OpenAsync();
 

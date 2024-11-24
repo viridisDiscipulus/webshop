@@ -1,3 +1,4 @@
+using System.Data;
 using Api.Extensions;
 using API.Extensions;
 using API.Middleware;
@@ -5,8 +6,10 @@ using API.Miscellaneous;
 using AppDomainModel.Interfaces;
 using AutoMapper;
 using DataAccess.Repositories;
+using DataAccess.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Services;
@@ -43,6 +46,14 @@ namespace API
                 return ConnectionMultiplexer.Connect(configuration);
             });
 
+            services.AddSingleton<IDbConnection>(sp =>
+            {
+                var configuration = sp.GetRequiredService<IConfiguration>();
+                var connectionString = configuration.GetConnectionString("DefaultConnection");
+                return new SqlConnection(connectionString);
+            });
+
+            services.AddCustomIdentityServices(_config);
             services.AddApplicationServices();
             services.AddSwaggerDocumentation();
         }
@@ -68,6 +79,7 @@ namespace API
              // Enable CORS
             app.UseCors("AllowSpecificOrigin");
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             // app.UseSwagger();

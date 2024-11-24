@@ -1,9 +1,9 @@
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using AppDomainModel.Interfaces;
 using AppDomainModel.Model;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Repositories
 {
@@ -11,9 +11,9 @@ namespace DataAccess.Repositories
     {
         private readonly string _connectionString;
 
-        public ProizvodRepository(IConfiguration configuration)
+        public ProizvodRepository(IDbConnection connection)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _connectionString = connection.ConnectionString;
         }
 
         public async Task<Proizvod> UcitajZaProizvodIdAsync(int Id)
