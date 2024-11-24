@@ -6,8 +6,6 @@ using API.ErrorTypes;
 using AppDomainModel.Interfaces;
 using AppDomainModel.Models.Identity;
 using AutoMapper;
-using DataAccess.Repositories;
-using DataAccess.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -114,10 +112,10 @@ namespace API.Controllers
         [HttpPost("registracija")]
         public async Task<ActionResult<KorisnikPovratniModel>> Register(RegistracijaPovratniModel registracija)
         {
-            // if (await _korisnikService.CheckEmailExistsAsync(registracija.Email))
-            // {
-            //     return new BadRequestObjectResult(new ApiValidationErrorResponse { Errors = new[] { "E-mail adresa je u upotrebi" } });
-            // }
+            if (await _korisnikService.CheckEmailExistsAsync(registracija.Email))
+            {
+                return new BadRequestObjectResult(new ApiValidationErrorResponse { Errors = new[] { "E-mail adresa je u upotrebi" } });
+            }
 
             var korisnik = new Korisnik
             {

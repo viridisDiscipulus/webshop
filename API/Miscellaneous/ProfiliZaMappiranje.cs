@@ -1,5 +1,6 @@
 using API.DTOs;
 using AppDomainModel.Model;
+using AppDomainModel.Models;
 using AppDomainModel.Models.Identity;
 using AutoMapper;
 
@@ -16,6 +17,10 @@ namespace API.Miscellaneous
 
         CreateMap<Adresa, AdresaPovratniModel>();
         CreateMap<AdresaPovratniModel, Adresa>();
+        CreateMap<KosaricaArtikl, KosaricaArtiklPovratniModel>();
+        CreateMap<KosaricaArtiklPovratniModel, KosaricaArtikl>();
+        CreateMap<KosaricaKupac, KosaricaKupacPovratnoModel>();
+        CreateMap<KosaricaKupacPovratnoModel, KosaricaKupac>();
       }
     }
 }

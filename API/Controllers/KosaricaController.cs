@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using API.DTOs;
 using AppDomainModel.Interfaces;
 using AppDomainModel.Models;
 using AutoMapper;
@@ -26,9 +27,11 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<KosaricaKupac>> UpdateKosaricaKupac(KosaricaKupac kosarica)
+        public async Task<ActionResult<KosaricaKupac>> UpdateKosaricaKupac(KosaricaKupacPovratnoModel kosarica)
         {
-            var updatedKosarica = await _kosaricaRepository.UpdateKosaricaKupacAsync(kosarica);
+            var kosaricaKupac = _mapper.Map<KosaricaKupacPovratnoModel, KosaricaKupac>(kosarica);
+
+            var updatedKosarica = await _kosaricaRepository.UpdateKosaricaKupacAsync(kosaricaKupac);
 
             return Ok(updatedKosarica);
         }
