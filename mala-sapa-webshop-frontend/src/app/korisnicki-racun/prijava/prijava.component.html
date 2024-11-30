@@ -1,0 +1,23 @@
+<div class="d-flex justify-content-center mt-5">
+    <div class="col-3">
+        <form [formGroup]="prijavaForm" (ngSubmit)="prijaviSe()">
+            <div class="text-center mb-4">
+                <h1 class="h3 mb-3 font-weight-normal">Prijava</h1>
+            </div>
+
+            <app-text-input formControlName="email" [label]="'Email Address'"></app-text-input>
+            <app-text-input formControlName="lozinka" [label]="'Lozinka'" [type]="'password'"></app-text-input>
+
+            <button class="btn btn-lg btn-primary btn-block" style="background-color: #FE17BD; color:white; font-weight: 500;" type="submit">Prijavi se</button>
+        </form>
+    </div>
+
+    <div class="col-4">
+        <p>Status forme: {{prijavaForm.status}}</p>
+        <p>Status email: {{prijavaForm.get('email').status}}</p>
+        <p>Email unesen: {{prijavaForm.get('email').touched}}</p>
+        <p>Email dirty: {{prijavaForm.get('email').dirty}}</p>
+        <pre>{{prijavaForm.value | json}}</pre>
+    </div>
+</div>
+

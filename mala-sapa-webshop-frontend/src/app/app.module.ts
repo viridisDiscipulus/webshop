@@ -30,3 +30,4 @@ import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

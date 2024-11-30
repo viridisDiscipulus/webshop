@@ -10,15 +10,36 @@
         <a class="p-2" routerLink="/test-error" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">ERRORS </a>
     </nav>
     <div class="d-flex align-items-center">
-        <div class="position-relative me-3 order-1" style="margin-right: 20px;">
-            <a routerLink="/kosarica">
-                <i class="fa fa-shopping-cart fa-1x" style="color: #FE17BD;"></i>
-                <div *ngIf="(kosarica$ | async) as kosarica" class="broj-kosarice">{{kosarica.artikli.length}}</div>
+        <a routerLink="/kosarica" class="position-relative" style="margin-right: 20px;">
+          <i class="fa fa-shopping-cart fa-1x" style="color: #FE17BD;"></i>
+          <div *ngIf="(kosarica$ | async)" class="broj-kosarice">{{(kosarica$ | async).artikli.length}}</div>
+        </a>
+        <ng-container *ngIf="(trenutniKorisnik$ | async) === null">
+          <a routerLink="/korisnicki-racun/prijava" class="btn btn-outline-secondary mr-2" style="margin-left: 5px;">Prijava</a>
+          <a routerLink="/korisnicki-racun/registracija" class="btn btn-outline-secondary mr-3" style="margin-left: 5px;">Registracija</a>
+        </ng-container>
+    
+        <ng-container *ngIf="trenutniKorisnik$ | async">
+          <div class="dropdown ml-3 mr-5" dropdown>
+            <a class="dropdown-toggle" style="cursor: pointer" dropdownToggle>
+              <strong style="color: white;">Dobrodošli {{(trenutniKorisnik$ | async).alias}}</strong>  
             </a>
-        </div>
-        <div class="order-2">
-            <a href="" class="btn btn-outline-secondary" style="margin-right: 5px;">Prijava</a>
-            <a href="" class="btn btn-outline-secondary" style="margin-left: 5px;">Registracija</a>
-        </div>
+            <div class="dropdown-menu dropdown-menu-right" style="cursor: pointer; background-color: #55404f;" *dropdownMenu>
+              <a routerLink="/kosarica" class="dropdown-item d-flex align-items-center py-2">
+                <i class="fa fa-shopping-cart mr-3" style="color: #FE17BD;"></i> 
+                Pregled košarice</a>
+              <a routerLink="/narudzba" class="dropdown-item d-flex align-items-center py-2">
+                <i class="fa fa-history mr-3" style="color: #FE17BD;"></i> 
+                Pregled narudžbi</a>
+              <div class="dropdown-divider"></div>
+              <a (click)="odjava()" class="dropdown-item d-flex align-items-center py-2" style="color: white !important;">
+                <i class="fa fa-sign-out mr-3" style="color: #FE17BD;"></i>
+                Odjava</a>
+            </div>
+          </div>
+        
+        </ng-container>
+    
+      </div>
+      
     </div>
-</div>

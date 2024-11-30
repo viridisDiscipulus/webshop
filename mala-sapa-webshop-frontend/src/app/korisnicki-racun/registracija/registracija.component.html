@@ -1,0 +1,23 @@
+<div class="d-flex justify-content-center mt-5">
+    <div class="col-3">
+        <form [formGroup]="registracijaForma" (ngSubmit)="registrirajSe()">
+            <div class="text-center mb-4">
+                <h1 class="h3 mb-3 font-weight-normal">Registracija</h1>
+            </div>
+
+            <app-text-input formControlName="alias" [label]="'Korisničko ime'"></app-text-input>
+            <app-text-input formControlName="email" [label]="'Email adresa'"></app-text-input>
+            <app-text-input formControlName="lozinka" [label]="'Lozinka'" [type]="'password'"></app-text-input>
+
+            <ul class="text-danger list-unstyled" *ngIf="errors">
+                <li *ngFor="let error of errors">
+                    {{error}}
+                </li>
+            </ul>
+
+            <button class="btn btn-lg btn-primary btn-block" style="background-color: #FE17BD; color:white; font-weight: 500;" type="submit">Registriraj se</button>
+        </form>
+    </div>
+
+</div>
+
