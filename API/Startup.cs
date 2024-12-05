@@ -27,8 +27,8 @@ namespace API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped(typeof(IGernericService<>), typeof(GenericService<>));                      
-            services.AddScoped(typeof(IGernericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));                      
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddAutoMapper(typeof(ProfiliZaMappiranje));
 
             services.AddCors(options =>

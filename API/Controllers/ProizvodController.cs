@@ -15,12 +15,12 @@ namespace API.Controllers
 {   
     public class ProizvodController : BaseApiController
     {
-        private readonly IGernericService<Proizvod> _proizvodService;
-        private readonly IGernericService<RobnaMarka> _robnaMarkaService;
-        private readonly IGernericService<VrstaProizvoda> _vrstaProizvodaService;
+        private readonly IGenericService<Proizvod> _proizvodService;
+        private readonly IGenericService<RobnaMarka> _robnaMarkaService;
+        private readonly IGenericService<VrstaProizvoda> _vrstaProizvodaService;
         private readonly IMapper _mapper;
 
-        public ProizvodController(IGernericService<Proizvod> proizvodService, IGernericService<RobnaMarka> robnaMarkaService, IGernericService<VrstaProizvoda> vrstaProizvodaService, IMapper mapper)
+        public ProizvodController(IGenericService<Proizvod> proizvodService, IGenericService<RobnaMarka> robnaMarkaService, IGenericService<VrstaProizvoda> vrstaProizvodaService, IMapper mapper)
         {
             _mapper = mapper;
             _proizvodService = proizvodService;
@@ -159,31 +159,6 @@ namespace API.Controllers
 
             return Ok(_mapper.Map<List<Proizvod>, List<ProizvodPovratniModel>>((List<Proizvod>)proizvodi));
         }
-
-        // [HttpPost]
-        // public IActionResult SnimiProizvod([FromBody] Proizvod proizvod)
-        // {
-        //     if (proizvod == null)
-        //         return BadRequest();
-
-        //     _proizvodService.SnimiProizvod(proizvod);
-        //     return Ok();
-        // }
-
-        // [HttpPut("{id}")]
-        // public IActionResult AzurirajProizvod(int id, [FromBody] Proizvod proizvod)
-        // {
-        //     proizvod.Id = id;
-        //     _proizvodService.AzurirajProizvod(proizvod);
-        //     return Ok();
-        // }
-
-        // [HttpDelete("{id}")]
-        // public IActionResult ObrisiProizvod(int id)
-        // {
-        //     _proizvodService.ObrisiProizvod(id);
-        //     return Ok();
-        // }
 
         [HttpGet("robneMarke")]
         [ProducesResponseType(StatusCodes.Status200OK)]

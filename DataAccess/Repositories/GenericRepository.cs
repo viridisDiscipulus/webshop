@@ -8,7 +8,7 @@ using Microsoft.Data.SqlClient;
 
 namespace DataAccess.Repositories
 {
-    public class GenericRepository<T> : IGernericRepository<T> where T : BaseModel
+    public class GenericRepository<T> : IGenericRepository<T> where T : BaseModel
     {
         private readonly string _connectionString;
 
@@ -60,6 +60,52 @@ namespace DataAccess.Repositories
             }
 
             return items;
+        }
+
+        public async Task<int> DodajAsync(string query, params SqlParameter[] parameters)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                await con.OpenAsync();
+
+                // Vraca ID novog zapisa
+                query += "; SELECT SCOPE_IDENTITY();";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddRange(parameters);
+                    var result = await cmd.ExecuteScalarAsync();
+                    return Convert.ToInt32(result);
+                }
+            }
+        }
+
+        public async Task<int> AzurirajAsync(string query, params SqlParameter[] parameters)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+            await con.OpenAsync();
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddRange(parameters);
+                    return await cmd.ExecuteNonQueryAsync();
+                }
+            }
+        }
+
+        public async Task<int> ObrisiAsync(string query, params SqlParameter[] parameters)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+            await con.OpenAsync();
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddRange(parameters);
+                    return await cmd.ExecuteNonQueryAsync();
+                }
+            }
         }
     }
  

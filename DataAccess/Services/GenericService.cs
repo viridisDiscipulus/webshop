@@ -7,11 +7,11 @@ using Microsoft.Data.SqlClient;
 
 namespace Services {
 
-    public class GenericService<T> : IGernericService<T> where T : BaseModel
+    public class GenericService<T> : IGenericService<T> where T : BaseModel
     {
-        private readonly IGernericRepository<T> _genericRepository;
+        private readonly IGenericRepository<T> _genericRepository;
 
-        public GenericService(IGernericRepository<T> genericRepository)
+        public GenericService(IGenericRepository<T> genericRepository)
         {
             _genericRepository = genericRepository;
         }   
@@ -25,5 +25,21 @@ namespace Services {
         {
              return await _genericRepository.UcitajSveAsync(query, mapFunction);
         }
+
+        public async Task<int> DodajAsync(string query, params SqlParameter[] parameters)
+        {
+             return await _genericRepository.DodajAsync(query, parameters);
+        }
+
+        public async Task<int> AzurirajAsync(string query, params SqlParameter[] parameters)
+        {
+             return await _genericRepository.AzurirajAsync(query, parameters);
+        }
+
+        public async Task<int> ObrisiAsync(string query, params SqlParameter[] parameters)
+        {
+             return await _genericRepository.ObrisiAsync(query, parameters);
+        }
+        
     }
 }

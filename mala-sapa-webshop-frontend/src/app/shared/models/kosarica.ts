@@ -7,7 +7,7 @@ export interface IKosarica {
 
 export interface IArtiklKosarica {
     id: number;
-    proizvodNaziv: string;
+    naziv: string;
     cijena: number;
     kolicina: number;
     slikaUrl: string;

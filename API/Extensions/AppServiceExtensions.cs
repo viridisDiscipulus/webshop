@@ -15,10 +15,14 @@ namespace API.Extensions
         {
             services.AddScoped<IProizvodRepository, ProizvodRepository>();
             services.AddScoped<IProizvodService, ProizvodService>();
+            services.AddScoped<IKosaricaService, KosaricaService>();
             services.AddScoped<IKosaricaRepository, KosaricaRepository>();
-            services.AddTransient<IKorisnikRepository, KorisnikRepository>();
-            services.AddTransient<IKorisnikService, KorisnikService>();
-            services.AddTransient<ITokenService, TokenService>();
+            services.AddScoped<IKorisnikRepository, KorisnikRepository>();
+            services.AddScoped<IKorisnikService, KorisnikService>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<INarudzbaRepository, NarudzbaRepository>();
+            services.AddScoped<INarudzbaService, NarudzbaService>();
+            
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = actionContext =>

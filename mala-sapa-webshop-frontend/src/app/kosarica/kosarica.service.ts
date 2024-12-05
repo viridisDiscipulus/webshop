@@ -23,7 +23,7 @@ export class KosaricaService {
       .get(this.baseUrl + 'kosarica?id=' + id)
       .pipe(map((kosarica: IKosarica) => {
         this.kosaricaSource.next(kosarica);
-        // console.log(this.getKosaricaValue());
+        console.log(this.getKosaricaValue());
         this.izracunajSumu();
       }));
     }
@@ -33,7 +33,7 @@ export class KosaricaService {
       .post(this.baseUrl + 'kosarica', kosarica)
       .subscribe((response: IKosarica) => {
         this.kosaricaSource.next(response);
-        // console.log(response);
+        console.log(response);
         this.izracunajSumu();
       }, error => {
         console.log(error);
@@ -112,10 +112,10 @@ export class KosaricaService {
   private mapProizvodArtiklToKosaricaArtikl(artikl: IProizvod, kolicina: number): IArtiklKosarica {
     return {
       id: artikl.id,
-      proizvodNaziv: artikl.naziv,
+      naziv: artikl.naziv,
       cijena: artikl.cijena,
       slikaUrl: artikl.slikaUrl,
-      kolicina,
+      kolicina: kolicina,
       robnaMarka: artikl.robnaMarka,
       vrstaProizvoda: artikl.vrstaProizvoda
     };
