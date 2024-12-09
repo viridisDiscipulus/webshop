@@ -53,7 +53,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<NarudzbaPovratniModel>> GetOrderByIdForUser(int id)
+        public async Task<ActionResult<NarudzbaPovratPovratniModel>> GetNarudzbaByIdAsync(int id)
         {
            var email = HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
 
@@ -63,11 +63,11 @@ namespace API.Controllers
 
             if (narudzba == null) return NotFound(new ApiResponse(404));
 
-            return Ok(_mapper.Map<Narudzba, NarudzbaPovratniModel>(narudzba));
+            return Ok(_mapper.Map<Narudzba, NarudzbaPovratPovratniModel>(narudzba));
         }
 
-        [HttpGet("naciniIsporuke")]
-        public async Task<ActionResult<IReadOnlyList<NacinIsporuke>>> GetDeliveryMethods()
+        [HttpGet("nacinIsporuke")]
+        public async Task<ActionResult<IReadOnlyList<NacinIsporuke>>> GetNacineIsporukeAsync()
         {
             return Ok(await _narudzbaService.GetNacineIsporukeAsync());
         }

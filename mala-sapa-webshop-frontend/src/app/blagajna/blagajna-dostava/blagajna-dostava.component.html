@@ -1,0 +1,27 @@
+<div class="mt-4" [formGroup]="blagajnaForm">
+    <h4 class="mb-3">Odaberite način isporuke</h4>
+    <div class="row" formGroupName="nacinIsporukeForm">
+        <div class="col-6 form-group custom-control custom-radio" *ngFor="let nacinIsporuke of naciniIsporuke">
+            <input type="radio"
+                id="{{nacinIsporuke.id}}"
+                (click)="postaviCijenuDostave(nacinIsporuke)"
+                value="{{nacinIsporuke.id}}"
+                formControlName="nacinIsporuke"
+                class="custom-control-input">
+            <label for="{{nacinIsporuke.id}}" class="custom-control-label">
+                <strong>{{nacinIsporuke.kratkiNaziv}} - {{nacinIsporuke.cijena | currency:'EUR'}}</strong>
+                <br>
+                <span class="lable-description">{{nacinIsporuke.opis}}</span>
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="float-none d-flex justify-content-between flex-column flex-lg-row mb-5">
+    <button class="btn btn-outline-primary" cdkStepperPrevious style="background-color: #FE17BD; color:white; cursor: pointer;">
+        <i class="fa fa-angle-left"></i> Povratak na adresu
+    </button>
+    <button [disabled]="blagajnaForm.get('nacinIsporukeForm').invalid" class="btn btn-primary" cdkStepperNext style="background-color: #FE17BD; color:white; cursor: pointer;">
+        Pregled <i class="fa fa-angle-right"></i> 
+    </button>
+</div>

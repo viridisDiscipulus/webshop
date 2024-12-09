@@ -5,21 +5,30 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NarudzbaSumaComponent } from './components/narudzba-suma/narudzba-suma.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TextInputComponent } from './components/text-input/text-input.component';
+import { CdkStepperModule } from '@angular/cdk/stepper';
+import { StepperComponent } from './components/stepper/stepper.component';
+import { KosaricaPregledComponent } from './kosarica-pregled/kosarica-pregled.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
-  declarations: [NarudzbaSumaComponent, TextInputComponent],
+  declarations: [NarudzbaSumaComponent, TextInputComponent, StepperComponent, KosaricaPregledComponent],
   imports: [
     CommonModule,
     CarouselModule.forRoot(),
     BsDropdownModule.forRoot(),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CdkStepperModule,
+    RouterModule
   ],
   exports: [
     CarouselModule,
     NarudzbaSumaComponent,
     BsDropdownModule,
     ReactiveFormsModule,
-    TextInputComponent
+    TextInputComponent,
+    CdkStepperModule,
+    StepperComponent,
+    KosaricaPregledComponent
   ]
 })
 export class SharedModule { }

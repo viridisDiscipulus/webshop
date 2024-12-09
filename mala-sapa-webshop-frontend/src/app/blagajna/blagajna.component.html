@@ -1,3 +1,24 @@
 <div class="container mt-5">
-    <h1>SAMO OVLAŠTENI KORISNIK TREBA MOĆI VIDJETI OVO</h1>
+    <div class="row">
+        <div class="col-8">
+            <app-stepper [linearModeSelected]="true" #appSteper>
+                <cdk-step label="Adresa">
+                    <app-blagajna-adresa [blagajnaForm]="blagajnaForm"></app-blagajna-adresa>
+                </cdk-step>
+                <cdk-step label="Dostava">
+                    <app-blagajna-dostava [blagajnaForm]="blagajnaForm"></app-blagajna-dostava>
+                </cdk-step>
+                <cdk-step label="Pregled">
+                    <app-blagajna-pregled></app-blagajna-pregled>
+                </cdk-step>
+                <cdk-step label="Placanje">
+                    <app-blagajna-placanje [blagajnaForm]="blagajnaForm"></app-blagajna-placanje>
+                </cdk-step>
+            </app-stepper>
+        </div>
+            <div class="col-4">
+                <app-narudzba-suma   
+                ></app-narudzba-suma>
+            </div>
+    </div>
 </div>

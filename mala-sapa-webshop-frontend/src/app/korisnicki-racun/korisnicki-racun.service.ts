@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { IKorisnik } from '../shared/models/korisnik';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { IAdresa } from '../shared/models/adresa';
 
 @Injectable({
   providedIn: 'root'
@@ -69,5 +70,14 @@ export class KorisnickiRacunService {
 
   proveriEmail(email: string) {
     return this.http.get(this.baseUrl + 'korisnickiRacun/emailProvjera?email=' + email);
+  }
+
+
+  getKorisnikAdresa() {
+    return this.http.get<IAdresa>(this.baseUrl + 'KorisnickiRacun/adresa');
+  }
+
+  azurirajKorisnikovuAdresu(adresa: IAdresa) {
+    return this.http.post<IAdresa>(this.baseUrl + 'KorisnickiRacun/adresa', adresa);
   }
 }

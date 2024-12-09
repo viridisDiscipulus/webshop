@@ -1,0 +1,41 @@
+<div class="mt-4" [formGroup]="blagajnaForm">
+    <div class="d-flex justify-content-between align-items-center">
+        <h4>Adresa dostave</h4>
+        <button 
+            (click)="spremiKorisnckuAdresu()" 
+            [disabled]="!blagajnaForm.get('adresaForm').valid || 
+                !blagajnaForm.get('adresaForm').dirty"
+            class="btn btn-outline-success mb-3">
+            Spremi adresu
+        </button>
+    </div>
+    <div class="row" formGroupName="adresaForm">
+        <div class="form-group col-6">
+            <app-text-input [label]="'Ime'" formControlName="ime"></app-text-input>
+        </div>
+        <div class="form-group col-6">
+            <app-text-input [label]="'Prezime'" formControlName="prezime"></app-text-input>
+        </div>
+        <div class="form-group col-6">
+            <app-text-input [label]="'Ulica'" formControlName="ulica"></app-text-input>
+        </div>
+        <div class="form-group col-6">
+            <app-text-input [label]="'Grad'" formControlName="grad"></app-text-input>
+        </div>
+        <div class="form-group col-6">
+            <app-text-input [label]="'Država'" formControlName="drzava"></app-text-input>
+        </div>
+        <div class="form-group col-6">
+            <app-text-input [label]="'Poštanski broj'" formControlName="postanskiBroj"></app-text-input>
+        </div>
+    </div>
+</div>
+
+<div class="float-none d-flex justify-content-between flex-column flex-lg-row mb-5">
+    <button class="btn btn-outline-primary" routerLink="/kosarica" style="background-color: #FE17BD; color:white; cursor: pointer;">
+        <i class="fa fa-angle-left"></i> Povratak u košaricu
+    </button>
+    <button [disabled]="blagajnaForm.get('adresaForm').invalid" class="btn btn-primary" cdkStepperNext style="background-color: #FE17BD; color:white; cursor: pointer;">
+        Odabir načina isporuke <i class="fa fa-angle-right" ></i> 
+    </button>
+</div>

@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { IArtiklKosarica, IKosarica, IKosaricaUkupno, Kosarica } from '../shared/models/kosarica';
 import { map } from 'rxjs/operators';
 import { IProizvod } from '../shared/models/proizvodi';
+import { INacinIsporuke } from '../shared/models/nacinIsporuke';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,7 @@ export class KosaricaService {
   kosarica$ = this.kosaricaSource.asObservable();
   private kosaricaUkupnoSource = new BehaviorSubject<IKosaricaUkupno>(null);
   kosaricaUkupno$ = this.kosaricaUkupnoSource.asObservable();
+  isporuka: number = 0;
 
   constructor(private http: HttpClient) {}
 
@@ -123,12 +125,29 @@ export class KosaricaService {
 
   private izracunajSumu(){
     const kosarica = this.getKosaricaValue();
-    const dostava = 0;
+    const dostava = this.isporuka;
     const ukupno = kosarica.artikli.reduce((prev, curr) => {
       return prev + curr.kolicina * curr.cijena;
     }, 0);
     const ukupnaNarudzba = ukupno + dostava;
     this.kosaricaUkupnoSource.next({dostava, ukupno, ukupnaNarudzba});
   }
+
+  createPaymentIntent() {
+    return this.http.post(this.baseUrl + 'payments/' + this.getKosaricaValue().id, {})
+      .pipe(
+        map((kosarica: IKosarica) => {
+          this.kosaricaSource.next(kosarica);
+        })
+      );
+  }
+
+  postaviCijenuDostave(nacinIsporuke: INacinIsporuke) {
+    this.isporuka = nacinIsporuke.cijena;
+    // const kosarica = this.getKosaricaValue();
+    this.izracunajSumu();
+    // this.setBasket(basket);
+  }
+
 
 }
