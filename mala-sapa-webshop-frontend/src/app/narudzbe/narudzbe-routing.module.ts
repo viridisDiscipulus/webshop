@@ -5,7 +5,7 @@ import { NarudzbeDetaljnoComponent } from './narudzbe-detaljno/narudzbe-detaljno
 
 const routes: Routes = [
   { path: '', component: NarudzbeComponent },
-  { path: ':id', component: NarudzbeDetaljnoComponent },
+  { path: ':id', component: NarudzbeDetaljnoComponent, data: {breadcrumb: {alias: 'Narudžba detaljno'}} },
 ];
 
 @NgModule({

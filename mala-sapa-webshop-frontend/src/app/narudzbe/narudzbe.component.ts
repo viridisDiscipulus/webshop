@@ -19,9 +19,9 @@ export class NarudzbeComponent implements OnInit {
   getNarudzbe(){
     this.narudzbeService.getNarudzbeZaKorisnika().subscribe((response: INarudzba[] )=> {
       this.narudzbe = response;
+      console.log(response);
     }, error => {
       console.log(error);
     });
   }
-
 }

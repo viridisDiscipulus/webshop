@@ -23,6 +23,7 @@ namespace API.Miscellaneous
 
         CreateMap<Narudzba, NarudzbaPovratPovratniModel>()
             .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
+            .ForMember(d => d.DatumNarudzbe, o => o.MapFrom(s => s.DatumNarudzbe.ToString("o")))
             .ForMember(d => d.NacinIsporuke, o => o.MapFrom(s => s.NacinIsporuke.KratkiNaziv))
             .ForMember(d => d.CijenaDostave, o => o.MapFrom(s => s.NacinIsporuke.Cijena))
             .ForMember(d => d.SveukupnaCijena, o => o.MapFrom(s => s.PunaCijena()));

@@ -11,9 +11,7 @@ import { KorisnickiRacunService } from './korisnicki-racun/korisnicki-racun.serv
 export class AppComponent implements OnInit {
   title = 'Mala Šapa';
 
-  constructor(private kosaricaService: KosaricaService, private korisnickiRacunService: KorisnickiRacunService) {
-  
-   }
+  constructor(private kosaricaService: KosaricaService, private korisnickiRacunService: KorisnickiRacunService) { }
 
   ngOnInit(): void {
     this.ucitajKosaricu();  

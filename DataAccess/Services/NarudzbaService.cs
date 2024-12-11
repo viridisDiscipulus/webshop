@@ -320,7 +320,7 @@ namespace DataAccess.Services
                SELECT  n.[Id]
                         ,n.[KupacEmail]
                         ,n.[DatumNarudzbe]
-                        ,a.[iD] AS AdresaDostaveId
+                        ,ISNULL(a.[iD], 1) AS AdresaDostaveId
 						,ISNULL(a.[Ime], '') AS Ime
                         ,ISNULL(a.[Prezime], '') AS Prezime
                         ,ISNULL(a.[Ulica], '') AS Ulica

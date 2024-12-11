@@ -9,15 +9,15 @@
                         <th scope="col">Ukupna cijena</th>
                         <th scope="col">Status</th>
                     </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let narudzba of narudzbe" routerLink="/narudzbe/{{narudzba.id}}">
-                            <td># {{ narudzba.id }}</td>
-                            <td>{{ narudzba.datum | date: 'medium' }}</td>
-                            <td>{{ narudzba.ukupnaCijena | currency: 'EUR' }}</td>
-                            <td>{{ narudzba.status }}</td>
-                        </tr>
-                    </tbody>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let narudzba of narudzbe" [routerLink]="['/narudzbe', narudzba.id]">
+                        <td># {{ narudzba.id }}</td>
+                        <td>{{ narudzba.datumNarudzbe | date: 'medium':'hr-HR' }}</td>
+                        <td>{{ narudzba.ukupnaCijena | currency: 'EUR' }}</td>
+                        <td>{{ narudzba.status }}</td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </div>

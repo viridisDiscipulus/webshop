@@ -14,7 +14,7 @@ export class NarudzbeDetaljnoComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private breadcrumbService: BreadcrumbService, private narudzbeService: NarudzbeService) 
   {
-    this.breadcrumbService.set('@Narudzbe detaljno', '');
+    this.breadcrumbService.set('@Narudžba detaljno', '');
    }
 
    ngOnInit() {
@@ -22,7 +22,7 @@ export class NarudzbeDetaljnoComponent implements OnInit {
     this.narudzbeService.getNarudzba(id).subscribe(
       (narudzba: INarudzba) => {
         this.narudzba = narudzba;
-        this.breadcrumbService.set('@Narudzbe detaljno', `Narudžba #${narudzba.id} - ${narudzba.status}`);
+        this.breadcrumbService.set('@Narudžba detaljno', `Narudzba# ${narudzba.id} - ${narudzba.status}`);
       },
       (error) => {
         console.error('Error fetching narudzba:', error);
