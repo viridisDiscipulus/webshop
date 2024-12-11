@@ -14,16 +14,16 @@ import { FormGroup } from '@angular/forms';
 })
 export class BlagajnaPlacanjeComponent implements OnInit {
   @Input() blagajnaForm: FormGroup;
-   ucitavanje: boolean;
+  ucitavanje: boolean;
 
   constructor(
-      private kosaricaService: KosaricaService, 
-      private blagajnaService: BlagajnaService, 
-      private toastr: ToastrService, 
-      private router: Router) { }
+    private kosaricaService: KosaricaService,
+    private blagajnaService: BlagajnaService,
+    private toastr: ToastrService,
+    private router: Router) { }
 
-    ngOnInit(): void {
-    }
+  ngOnInit(): void {
+  }
 
   async predajNarudzbu() {
     try {
@@ -32,7 +32,7 @@ export class BlagajnaPlacanjeComponent implements OnInit {
       this.blagajnaService.kreirajNarudzbu(narudzbaZaKreiranje).subscribe((narudzba: INarudzba) => {
         this.toastr.success('Narudžba uspješno kreirana');
         this.kosaricaService.obrisiKosaricu(kosarica);
-        const navigationExtras: NavigationExtras = {state: narudzba};
+        const navigationExtras: NavigationExtras = { state: narudzba };
         this.router.navigate(['blagajna/blagajna-zavrsetak-procesa'], navigationExtras);
       }, error => {
         this.toastr.error('Narudžba nije uspješno kreirana');

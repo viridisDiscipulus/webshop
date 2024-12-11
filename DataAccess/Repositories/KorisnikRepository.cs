@@ -80,20 +80,20 @@ namespace DataAccess.Repositories
         {
             const string query =
                 @"SELECT  
-                    k.Id,
+                     k.Id,
                     k.Alias,
                     k.KorisnickoIme,
                     k.Lozinka,
                     k.Email,
                     k.AdresaID,
-                    a.Ulica,
-                    a.Grad,
-                    a.PostanskiBroj,
-                    a.Drzava,
-                    a.Ime,
-                    a.Prezime,
-                    a.KorisnikId,
-                    a.Id AS AdresaID
+                    ISNULL(a.Ulica,'') AS Ulica,
+                    ISNULL(a.Grad,'') AS Grad,
+                    ISNULL(a.PostanskiBroj, '') AS PostanskiBroj,
+                    ISNULL(a.Drzava, '') AS Drzava,
+                    ISNULL(a.Ime, '') AS Ime,
+                    ISNULL(a.Prezime, '') AS Prezime,
+                    ISNULL(a.KorisnikId, -1) AS KorisnikId,
+                    ISNULL(a.Id, -1) AS AdresaID
                 FROM Korisnici k 
                     LEFT JOIN Adrese a ON k.AdresaID = a.ID
                 WHERE Email = @Email";
@@ -143,9 +143,8 @@ namespace DataAccess.Repositories
         {
             const string query = @"
                 INSERT INTO Korisnici 
-                (Alias, KorisnickoIme, Lozinka, Email, AdresaID) 
-                VALUES (@Alias, @KorisnickoIme, @Lozinka, @Email, @AdresaID);
-                SELECT SCOPE_IDENTITY();";
+                (Id, Alias, KorisnickoIme, Lozinka, Email, AdresaID) 
+                VALUES (@Id, @Alias, @KorisnickoIme, @Lozinka, @Email, @AdresaID);";
 
             using (var connection = new SqlConnection(_dbConnection.ConnectionString))
             {
@@ -153,15 +152,16 @@ namespace DataAccess.Repositories
                 
                 using (var command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Alias", korisnik.Alias ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@Id", korisnik.Id);
+                    command.Parameters.AddWithValue("@Alias", korisnik.Alias);
                     command.Parameters.AddWithValue("@KorisnickoIme", korisnik.KorisnickoIme);
                     command.Parameters.AddWithValue("@Lozinka", korisnik.Lozinka);
                     command.Parameters.AddWithValue("@Email", korisnik.Email);
-                    command.Parameters.AddWithValue("@AdresaID", korisnik.AdresaId > 0 ? korisnik.AdresaId : (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@AdresaID", -1);
 
-                    var result = await command.ExecuteScalarAsync();
+                    var affectedRows = await command.ExecuteNonQueryAsync();
 
-                    return result != null && Convert.ToInt32(result) > 0;
+                    return affectedRows > 0;
                 }
             }
         }
@@ -169,8 +169,8 @@ namespace DataAccess.Repositories
 
 
       public async Task<bool> UpdateKorisnikAsync(Korisnik korisnik)
-        {
-            const string updateKorisnikQuery = @"
+     {
+                const string updateKorisnikQuery = @"
                 UPDATE Korisnici
                 SET 
                     Alias = @Alias,
@@ -180,9 +180,16 @@ namespace DataAccess.Repositories
                     AdresaID = @AdresaID
                 WHERE Id = @Id";
 
+            const string insertAdresaQuery = @"
+                INSERT INTO Adrese (Ime, Prezime, Ulica, Grad, PostanskiBroj, Drzava, KorisnikId)
+                VALUES (@Ime, @Prezime, @Ulica, @Grad, @PostanskiBroj, @Drzava, @KorisnikId);
+                SELECT SCOPE_IDENTITY();";
+
             const string updateAdresaQuery = @"
                 UPDATE Adrese
                 SET 
+                    Ime = @Ime,
+                    Prezime = @Prezime,
                     Ulica = @Ulica,
                     Grad = @Grad,
                     PostanskiBroj = @PostanskiBroj,
@@ -197,7 +204,40 @@ namespace DataAccess.Repositories
                 {
                     try
                     {
-                        // Update Korisnik
+                        if (korisnik.AdresaId > 0 && korisnik.Adresa != null)
+                        {
+                            using (var adresaCommand = new SqlCommand(updateAdresaQuery, connection, transaction))
+                            {
+                                adresaCommand.Parameters.AddWithValue("@Ime", korisnik.Adresa.Ime);
+                                adresaCommand.Parameters.AddWithValue("@Prezime", korisnik.Adresa.Prezime);
+                                adresaCommand.Parameters.AddWithValue("@Ulica", korisnik.Adresa.Ulica);
+                                adresaCommand.Parameters.AddWithValue("@Grad", korisnik.Adresa.Grad);
+                                adresaCommand.Parameters.AddWithValue("@PostanskiBroj", korisnik.Adresa.PostanskiBroj);
+                                adresaCommand.Parameters.AddWithValue("@Drzava", korisnik.Adresa.Drzava);
+
+                                await adresaCommand.ExecuteNonQueryAsync();
+                            }
+                        }
+                        else if (korisnik.Adresa != null)
+                        {
+                            using (var adresaCommand = new SqlCommand(insertAdresaQuery, connection, transaction))
+                            {
+                                adresaCommand.Parameters.AddWithValue("@Ime", korisnik.Adresa.Ime);
+                                adresaCommand.Parameters.AddWithValue("@Prezime", korisnik.Adresa.Prezime);
+                                adresaCommand.Parameters.AddWithValue("@Ulica", korisnik.Adresa.Ulica);
+                                adresaCommand.Parameters.AddWithValue("@Grad", korisnik.Adresa.Grad);
+                                adresaCommand.Parameters.AddWithValue("@PostanskiBroj", korisnik.Adresa.PostanskiBroj);
+                                adresaCommand.Parameters.AddWithValue("@Drzava", korisnik.Adresa.Drzava);
+                                adresaCommand.Parameters.AddWithValue("@KorisnikId", korisnik.Id);
+
+                                var result = await adresaCommand.ExecuteScalarAsync();
+                                if (result != null && int.TryParse(result.ToString(), out int newAdresaId))
+                                {
+                                    korisnik.AdresaId = newAdresaId;
+                                }
+                            }
+                        }
+
                         using (var korisnikCommand = new SqlCommand(updateKorisnikQuery, connection, transaction))
                         {
                             korisnikCommand.Parameters.AddWithValue("@Id", korisnik.Id);
@@ -205,24 +245,9 @@ namespace DataAccess.Repositories
                             korisnikCommand.Parameters.AddWithValue("@KorisnickoIme", korisnik.KorisnickoIme);
                             korisnikCommand.Parameters.AddWithValue("@Lozinka", korisnik.Lozinka);
                             korisnikCommand.Parameters.AddWithValue("@Email", korisnik.Email);
-                            korisnikCommand.Parameters.AddWithValue("@AdresaID", korisnik.AdresaId > 0 ? korisnik.AdresaId : (object)DBNull.Value);
+                            korisnikCommand.Parameters.AddWithValue("@AdresaID", korisnik.AdresaId > 0 ? korisnik.AdresaId : -1);
 
                             await korisnikCommand.ExecuteNonQueryAsync();
-                        }
-
-                        // Update Adresa if AdresaID is valid
-                        if (korisnik.AdresaId > 0 && korisnik.Adresa != null)
-                        {
-                            using (var adresaCommand = new SqlCommand(updateAdresaQuery, connection, transaction))
-                            {
-                                adresaCommand.Parameters.AddWithValue("@AdresaID", korisnik.AdresaId);
-                                adresaCommand.Parameters.AddWithValue("@Ulica", korisnik.Adresa.Ulica ?? (object)DBNull.Value);
-                                adresaCommand.Parameters.AddWithValue("@Grad", korisnik.Adresa.Grad ?? (object)DBNull.Value);
-                                adresaCommand.Parameters.AddWithValue("@PostanskiBroj", korisnik.Adresa.PostanskiBroj ?? (object)DBNull.Value);
-                                adresaCommand.Parameters.AddWithValue("@Drzava", korisnik.Adresa.Drzava ?? (object)DBNull.Value);
-
-                                await adresaCommand.ExecuteNonQueryAsync();
-                            }
                         }
 
                         transaction.Commit();
@@ -230,7 +255,6 @@ namespace DataAccess.Repositories
                     }
                     catch
                     {
-
                         transaction.Rollback();
                         return false;
                     }

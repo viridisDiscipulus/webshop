@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -88,7 +89,7 @@ namespace API.Controllers
             var result = await _korisnikService.UpdateKorisnikAsync(korisnik);
 
             if (!result)
-                return BadRequest("Problem s azuriranjem korisnika");
+                return BadRequest(new ApiResponse(400));
 
             return Ok(_mapper.Map<Adresa, AdresaPovratniModel>(korisnik.Adresa));
         }
@@ -119,9 +120,11 @@ namespace API.Controllers
 
             var korisnik = new Korisnik
             {
+                Id = Guid.NewGuid().ToString(),
                 Alias = registracija.Alias,
                 Email = registracija.Email,
-                KorisnickoIme = registracija.Email
+                KorisnickoIme = registracija.Email,
+                Lozinka = registracija.Lozinka
                 // Lozinka = await _korisnikService.HashirajLozinkuAsync(registracija.Lozinka)
             };
 

@@ -14,16 +14,16 @@ export class BlagajnaService {
   constructor(private http: HttpClient) { }
 
   getNacinIsporuke() {
-      return this.http.get(this.baseUrl + 'narudzba/nacinIsporuke').pipe(
-        map((response: INacinIsporuke[]) => {
-          return response.sort((a, b) => a.id - b.id);
-        })
-      );
+    return this.http.get(this.baseUrl + 'narudzba/nacinIsporuke').pipe(
+      map((response: INacinIsporuke[]) => {
+        return response.sort((a, b) => a.id - b.id);
+      })
+    );
   }
 
-  kreirajNarudzbu(narudzba: INarudzbaZaKreiranje){
+  kreirajNarudzbu(narudzba: INarudzbaZaKreiranje) {
     return this.http.post(this.baseUrl + 'narudzba', narudzba);
   }
-  
+
 
 }

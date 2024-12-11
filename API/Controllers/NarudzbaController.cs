@@ -29,7 +29,7 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-         [HttpPost]
+        [HttpPost]
         public async Task<ActionResult<Narudzba>> KreirajNarudzbu(NarudzbaPovratniModel narudzbaPovratniModel)
         {
             var email = HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
@@ -40,7 +40,7 @@ namespace API.Controllers
 
             if (narudzba == null) return BadRequest(new ApiResponse(400, "Problem kod kreiranje narudžbe"));
 
-             var narudzbaDto = new NarudzbaPovratPovratniModel
+            var narudzbaDto = new NarudzbaPovratPovratniModel
             {
                 Id = narudzba.Id,
                 KupacEmail = narudzba.KupacEmail,
@@ -72,7 +72,7 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<NarudzbaPovratPovratniModel>> GetNarudzbaByIdAsync(int id)
         {
-           var email = HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+            var email = HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
 
             var narudzba = await _narudzbaService.GetNarudzbaByIdAsync(id, email);
 
@@ -87,6 +87,6 @@ namespace API.Controllers
         public async Task<ActionResult<IReadOnlyList<NacinIsporuke>>> GetNacineIsporukeAsync()
         {
             return Ok(await _narudzbaService.GetNacineIsporukeAsync());
-        }  
+        }
     }
 }

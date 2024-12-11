@@ -78,6 +78,6 @@ export class KorisnickiRacunService {
   }
 
   azurirajKorisnikovuAdresu(adresa: IAdresa) {
-    return this.http.post<IAdresa>(this.baseUrl + 'KorisnickiRacun/adresa', adresa);
+    return this.http.put<IAdresa>(this.baseUrl + 'KorisnickiRacun/adresa', adresa);
   }
 }
