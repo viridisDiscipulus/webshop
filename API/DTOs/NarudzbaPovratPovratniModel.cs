@@ -11,7 +11,8 @@ namespace API.Controllers
     {
             public int Id { get; set; }
             public string KupacEmail { get; set; }
-            public DateTimeOffset DatumNarudzbe { get; set; }
+            // public DateTimeOffset DatumNarudzbe { get; set; }
+            public string DatumNarudzbe { get; set; }
             public AppDomainModel.Models.NarudzbeSkupno.Adresa AdresaDostave { get; set; }
             public string NacinIsporuke { get; set; }
             public decimal CijenaDostave { get; set; }

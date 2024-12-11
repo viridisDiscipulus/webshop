@@ -33,7 +33,7 @@ export class BlagajnaPlacanjeComponent implements OnInit {
         this.toastr.success('Narudžba uspješno kreirana');
         this.kosaricaService.obrisiKosaricu(kosarica);
         const navigationExtras: NavigationExtras = {state: narudzba};
-        this.router.navigate(['blagajna/zavrsetak'], navigationExtras);
+        this.router.navigate(['blagajna/blagajna-zavrsetak-procesa'], navigationExtras);
       }, error => {
         this.toastr.error('Narudžba nije uspješno kreirana');
         console.log(error);

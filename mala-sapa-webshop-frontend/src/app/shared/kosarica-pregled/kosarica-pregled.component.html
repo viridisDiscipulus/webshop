@@ -1,35 +1,37 @@
-<ng-container *ngIf="kosarica$ | async">
+<ng-container *ngIf="artikli.length > 0">
     <div class="table-response">
-        <table class="table">
-            <thead>
+        <table class="tabl table-borderless">
+            <thead [class.thead-light]="narudzbaBool || kosaricaBool" class="border-0 py-2">
                 <tr>
-                    <th class="border-0" scope="col" [class.bg-light]="kosaricaBool">
+                    <th class="border-0" scope="col">
                         <div class="p-2 px-3 text-uppercase">Proizvod</div>
                     </th>
-                    <th scope="col" class="border-0" [class.bg-light]="kosaricaBool">
+                    <th scope="col" class="border-0">
                         <div class="py-2 text-uppercase">Cijena</div>
                     </th>
-                    <th scope="col" class="border-0" [class.bg-light]="kosaricaBool">
+                    <th scope="col" class="border-0">
                         <div class="py-2 text-uppercase">Količina</div>
                     </th>
-                    <th scope="col" class="border-0" [class.bg-light]="kosaricaBool">
+                    <th scope="col" class="border-0">
                         <div class="py-2 text-uppercase">Ukupno</div>
                     </th>   
-                    <th *ngIf="kosaricaBool"  scope="col" class="border-0 bg-light">
+                    <th *ngIf="kosaricaBool"  scope="col" class="border-0">
                         <div class="py-2 text-uppercase">Uklonite proizvod</div>
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let artikl of (kosarica$ | async).artikli">
+                <tr *ngFor="let artikl of artikli" class="border-0">
                     <th scope="row">
                         <div class="p-2">
                             <img src="{{artikl.slikaUrl}}" alt="{{artikl.proizvodNaziv}}" class="img-fluid" style="max-height: 50px ;">
                             <div class="ml-3 d-inline-block align-middle">
                                 <h5 class="mb-0">
-                                    <a routerLink="/webshop/{{artikl.id}}" class="text-dark">{{artikl.proizvodNaziv}}</a>
+                                    <a routerLink="/webshop/{{artikl.id || artikl.proizvodId}}" class="text-dark">{{artikl.proizvodNaziv}}</a>
                                 </h5>
-                                <span class="text-muted font-weight-normal font-italic d-block">Vrsta proizvoda: {{artikl.vrstaProizvoda}}
+                                <span
+                                *ngIf="artikl.vrstaProizvoda"
+                                class="text-muted font-weight-normal font-italic d-block">Vrsta proizvoda: {{artikl.vrstaProizvoda}}
                                 </span>
                             </div>
                         </div>

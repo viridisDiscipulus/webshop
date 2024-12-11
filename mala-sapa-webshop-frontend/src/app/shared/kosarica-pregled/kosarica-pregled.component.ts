@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { KosaricaService } from 'src/app/kosarica/kosarica.service';
 import { IArtiklKosarica, IKosarica } from '../models/kosarica';
 import { EventEmitter, Output } from '@angular/core';
+import { INaruceniArtikl } from '../models/narudzba';
 
 @Component({
   selector: 'app-kosarica-pregled',
@@ -10,17 +11,21 @@ import { EventEmitter, Output } from '@angular/core';
   styleUrls: ['./kosarica-pregled.component.scss']
 })
 export class KosaricaPregledComponent implements OnInit {
-  kosarica$: Observable<IKosarica>;
+  // kosarica$: Observable<IKosarica>;
   @Output() umanjiKolicinu: EventEmitter<IArtiklKosarica> = new EventEmitter<IArtiklKosarica>();
   @Output() uvecajKolicinu: EventEmitter<IArtiklKosarica> = new EventEmitter<IArtiklKosarica>();
   @Output() ukloniArtikl: EventEmitter<IArtiklKosarica> = new EventEmitter<IArtiklKosarica>();
   @Input() kosaricaBool = true; 
+  @Input() artikli: IArtiklKosarica[] | INaruceniArtikl[] = [];
+  @Input() narudzbaBool = false;
 
 
-  constructor(private kosaricaService: KosaricaService) { }
+  constructor(
+              //private kosaricaService: KosaricaService
+            ) { }
 
   ngOnInit(): void {
-    this.kosarica$ = this.kosaricaService.kosarica$;
+    // this.kosarica$ = this.kosaricaService.kosarica$;
   }
 
   ukloniArtiklIzKosarice(artikl: IArtiklKosarica) {

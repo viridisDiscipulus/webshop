@@ -23,6 +23,13 @@ const routes: Routes = [
   
   {path: 'korisnicki-racun', loadChildren: () => import('./korisnicki-racun/korisnicki-racun.module').then(m => m.KorisnickiRacunModule), data: {breadcrumb: {skip: true}}},
   
+  {
+    path: 'narudzbe',
+    loadChildren: () =>
+      import('./narudzbe/narudzbe.module').then((mod) => mod.NarudzbeModule),
+    data: { breadcrumb: 'Narudzbe' },
+  },
+  
   {path: 'test-error', component: TestErrorComponent },
   
   {path: '**', redirectTo: 'Nije pronađeno', pathMatch: 'full'}

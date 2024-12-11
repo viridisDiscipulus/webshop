@@ -1,5 +1,8 @@
 <div class="mt-4">
-    <app-kosarica-pregled [kosaricaBool]="false"></app-kosarica-pregled>
+    <app-kosarica-pregled 
+    [kosaricaBool]="false"
+    [artikli]="(kosarica$ | async).artikli"
+    ></app-kosarica-pregled>
 </div>
 
 <div class="float-none d-flex justify-content-between flex-column flex-lg-row mb-5">

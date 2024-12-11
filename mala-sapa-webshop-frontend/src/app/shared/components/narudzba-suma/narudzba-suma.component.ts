@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { KosaricaService } from 'src/app/kosarica/kosarica.service';
 
 @Component({
@@ -8,8 +8,13 @@ import { KosaricaService } from 'src/app/kosarica/kosarica.service';
 })
 export class NarudzbaSumaComponent implements OnInit {
   kosaricaUkupno$ = this.kosaricaService.kosaricaUkupno$;
+  @Input() narudzbaDostava: number;
+  @Input() narudzbaCijena: number;
+  @Input() narudzbaUkupno: number;
 
-  constructor(private kosaricaService: KosaricaService) { }
+  constructor(
+        private kosaricaService: KosaricaService
+          ) { }
 
   ngOnInit(): void {
     this.kosaricaUkupno$ = this.kosaricaService.kosaricaUkupno$;

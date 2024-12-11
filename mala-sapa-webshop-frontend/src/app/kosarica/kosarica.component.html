@@ -13,14 +13,20 @@
                             (umanjiKolicinu)="umanjiKolicinuArtikla($event)"
                             (uvecajKolicinu)="uvecajKolicinuArtikla($event)"
                             (ukloniArtikl)="ukloniArtiklIzKosarice($event)"
+                            [artikli]="(kosarica$ | async).artikli"
                         ></app-kosarica-pregled>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-6 offset-6">
-                        <app-narudzba-suma></app-narudzba-suma>
-                        <a routerLink="/blagajna/" class="btn btn-outline.primary py-2 btn-block" style="background-color: #FE17BD; color:white; cursor: pointer;">
+                        <app-narudzba-suma
+                            *ngIf="(kosaricaUkupno$ | async)"
+                            [narudzbaDostava]="(kosaricaUkupno$ | async).dostava"
+                            [narudzbaCijena]="(kosaricaUkupno$ | async).ukupno"
+                            [narudzbaUkupno]="(kosaricaUkupno$ | async).ukupnaNarudzba"
+                        ></app-narudzba-suma>
+                        <a routerLink="/blagajna" class="btn btn-outline.primary py-2      btn-block" style="background-color: #FE17BD; color:white; cursor: pointer;">
                             Nastavite na plaćanje
                         </a>
                     </div>

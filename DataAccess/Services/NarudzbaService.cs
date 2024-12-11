@@ -57,9 +57,9 @@ namespace DataAccess.Services
                     rm.Naziv AS RobnaMarkaNaziv
                 FROM 
                     Proizvod p
-                INNER JOIN 
+                LEFT JOIN 
                     VrstaProizvoda vp ON p.VrstaProizvodaID = vp.ID
-                INNER JOIN 
+                LEFT JOIN 
                     RobnaMarka rm ON p.RobnaMarkaID = rm.ID
                 WHERE 
                     p.Id = @ID;";
@@ -236,8 +236,8 @@ namespace DataAccess.Services
                         ,n.[UkupnaCijena]
                         ,n.[Status]
                     FROM [dbo].[Narudzba] n
-                    INNER JOIN [dbo].[Adrese] a ON n.AdresaDostaveId = a.Id
-                    INNER JOIN [dbo].[NacinIsporuke] i ON n.NacinIsporukeId = i.Id
+                    LEFT JOIN [dbo].[Adrese] a ON n.AdresaDostaveId = 0
+                    LEFT JOIN [dbo].[NacinIsporuke] i ON n.NacinIsporukeId = i.Id
                     WHERE n.[Id] = @ID AND [KupacEmail] = @Email;";
                     
                 var narudzba = await _narudzbaService.UcitajPoIdAsync(query, dr => new Narudzba
@@ -336,8 +336,8 @@ namespace DataAccess.Services
                         ,n.[UkupnaCijena]
                         ,n.[Status]
                     FROM [dbo].[Narudzba] n
-                    INNER JOIN [dbo].[Adrese] a ON n.AdresaDostaveId = a.Id
-                    INNER JOIN [dbo].[NacinIsporuke] i ON n.NacinIsporukeId = i.Id";
+                    LEFT JOIN [dbo].[Adrese] a ON n.AdresaDostaveId = 0
+                    LEFT JOIN [dbo].[NacinIsporuke] i ON n.NacinIsporukeId = i.Id";
 
                 query += $" WHERE [KupacEmail] = '{kupacEmail.Replace("'", "''")}';";  
 

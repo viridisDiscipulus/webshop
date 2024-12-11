@@ -6,7 +6,7 @@ import { BlagajnaZavrsetakProcesaComponent } from './blagajna-zavrsetak-procesa/
 
 const routes: Routes = [
   {path: '', component: BlagajnaComponent},
-  {path: 'zavrsetak', component: BlagajnaZavrsetakProcesaComponent}
+  {path: 'blagajna-zavrsetak-procesa', component: BlagajnaZavrsetakProcesaComponent}
 ];
 
 @NgModule({

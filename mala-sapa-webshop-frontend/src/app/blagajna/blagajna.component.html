@@ -18,6 +18,10 @@
         </div>
             <div class="col-4">
                 <app-narudzba-suma   
+                *ngIf="(kosaricaUkupno$ | async)"
+                [narudzbaDostava]="(kosaricaUkupno$ | async).dostava"
+                [narudzbaCijena]="(kosaricaUkupno$ | async).ukupno"
+                [narudzbaUkupno]="(kosaricaUkupno$ | async).ukupnaNarudzba"
                 ></app-narudzba-suma>
             </div>
     </div>

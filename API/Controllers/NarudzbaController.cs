@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using API.DTOs;
 using API.ErrorTypes;
+using API.Miscellaneous;
 using AppDomainModel.Interfaces;
 using AppDomainModel.Models.NarudzbeSkupno;
 using AutoMapper;
@@ -35,9 +38,23 @@ namespace API.Controllers
 
             var narudzba = await _narudzbaService.CreateNarudzbuAsync(email, narudzbaPovratniModel.NacinIsporukeId, narudzbaPovratniModel.KosaricaId, adresa);
 
-            if (narudzba == null) return BadRequest(new ApiResponse(400));
+            if (narudzba == null) return BadRequest(new ApiResponse(400, "Problem kod kreiranje narudžbe"));
 
-            return Ok(narudzba);
+             var narudzbaDto = new NarudzbaPovratPovratniModel
+            {
+                Id = narudzba.Id,
+                KupacEmail = narudzba.KupacEmail,
+                DatumNarudzbe = narudzba.DatumNarudzbe.ToString("o"),
+                AdresaDostave = narudzba.AdresaDostave,
+                NacinIsporuke = narudzba.NacinIsporuke.KratkiNaziv,
+                CijenaDostave = narudzba.NacinIsporuke.Cijena,
+                NaruceniArtikli = _mapper.Map<IReadOnlyList<NaruceniArtikl>, IReadOnlyList<NaruceniArtikliPovratniModel>>(narudzba.NaruceniArtikli),
+                UkupnaCijena = narudzba.UkupnaCijena,
+                Status = EnumExtensions.GetEnumMemberValue(narudzba.Status),
+                SveukupnaCijena = narudzba.PunaCijena()
+            };
+
+            return Ok(narudzbaDto);
         }
 
         [HttpGet]
@@ -70,7 +87,6 @@ namespace API.Controllers
         public async Task<ActionResult<IReadOnlyList<NacinIsporuke>>> GetNacineIsporukeAsync()
         {
             return Ok(await _narudzbaService.GetNacineIsporukeAsync());
-        }
-        
+        }  
     }
 }

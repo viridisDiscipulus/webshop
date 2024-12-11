@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { KosaricaService } from './kosarica.service';
 import { Observable } from 'rxjs';
-import { IArtiklKosarica, IKosarica } from '../shared/models/kosarica';
+import { IArtiklKosarica, IKosarica, IKosaricaUkupno } from '../shared/models/kosarica';
 
 @Component({
   selector: 'app-kosarica',
@@ -10,11 +10,13 @@ import { IArtiklKosarica, IKosarica } from '../shared/models/kosarica';
 })
 export class KosaricaComponent implements OnInit {
   kosarica$: Observable<IKosarica>;
+  kosaricaUkupno$: Observable<IKosaricaUkupno>;
 
   constructor(private kosaricaSerive: KosaricaService) { }
 
   ngOnInit(): void {
     this.kosarica$ = this.kosaricaSerive.kosarica$;
+    this.kosaricaUkupno$ = this.kosaricaSerive.kosaricaUkupno$;
   }
 
   ukloniArtiklIzKosarice(artikl: IArtiklKosarica) {

@@ -1,0 +1,19 @@
+<div class="container mt-5">
+    <div class="row" *ngIf="narudzba">
+        <div class="col-8">
+            <app-kosarica-pregled
+                [artikli]="narudzba.naruceniArtikli"
+                [kosaricaBool]="false"
+                [narudzbaBool]="true"
+            >
+            </app-kosarica-pregled>
+        </div>
+        <div class="col-4">
+            <app-narudzba-suma
+                [narudzbaDostava]="narudzba.cijenaDostave"
+                [narudzbaCijena]="narudzba.ukupnaCijena"
+                [narudzbaUkupno]="narudzba.sveukupnaCijena"
+            ></app-narudzba-suma>    
+        </div>
+    </div>
+</div>

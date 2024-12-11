@@ -3,18 +3,18 @@
 </div>
 <div class="p-4">
     <p class="font-italic mb-4">Troškovi dostave dodat će se ovisno o izabranom tipu dostave</p>
-    <ul class="list-unstyled mb-4" *ngIf="(kosaricaUkupno$ | async)">
+    <ul class="list-unstyled mb-4">
         <li class="d-flex justify-content-between py-3 border-bottom">
             <strong class="text-muted">Ukupno</strong>
-            <strong>{{(kosaricaUkupno$ | async).ukupno | currency: 'EUR'}}</strong>
+            <strong>{{narudzbaCijena | currency: 'EUR'}}</strong>
         </li>
         <li class="d-flex justify-content-between py-3 border-bottom">
             <strong class="text-muted">Dostava</strong>
-            <strong>{{(kosaricaUkupno$ | async).dostava | currency: 'EUR'}}</strong>
+            <strong>{{narudzbaDostava | currency: 'EUR'}}</strong>
         </li>
         <li class="d-flex justify-content-between py-3 border-bottom">
             <strong class="text-muted">Ukupna narudžba</strong>
-            <strong>{{(kosaricaUkupno$ | async).ukupnaNarudzba | currency: 'EUR'}}</strong>
+            <strong>{{narudzbaUkupno | currency: 'EUR'}}</strong>
         </li>
     </ul>
 </div>
