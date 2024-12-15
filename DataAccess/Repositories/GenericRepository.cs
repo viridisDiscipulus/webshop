@@ -19,23 +19,36 @@ namespace DataAccess.Repositories
 
         public async Task<T> UcitajPoIdAsync(string query, Func<SqlDataReader, T> mapFunction, params SqlParameter[] parameters)
         {
-             T item = default;
+            T item = default;
 
-        using (SqlConnection con = new SqlConnection(_connectionString))
-        {
-            await con.OpenAsync();
-
-            SqlCommand cmd = new SqlCommand(query, con);
-            cmd.Parameters.AddRange(parameters);
-
-            using (SqlDataReader dr = await cmd.ExecuteReaderAsync())
+            try
             {
-                if (await dr.ReadAsync())
+                using (SqlConnection con = new SqlConnection(_connectionString))
                 {
-                    item = mapFunction(dr);
+                    await con.OpenAsync();
+
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddRange(parameters);
+
+                    using (SqlDataReader dr = await cmd.ExecuteReaderAsync())
+                    {
+                        if (await dr.ReadAsync())
+                        {
+                            item = mapFunction(dr);
+                        }
+                    }
                 }
             }
-         }
+            catch (SqlException sqlEx)
+            {
+                Console.Error.WriteLine($"SQL Error: {sqlEx.Message}\nStack Trace: {sqlEx.StackTrace}");
+                throw new Exception("Došlo je do pogreške u bazi podataka tijekom izvođenja upita.", sqlEx);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Error: {ex.Message}\nStack Trace: {ex.StackTrace}");
+                throw new Exception("Došlo je do neočekivane pogreške tijekom izvođenja upita.", ex);
+            }
 
             return item;
         }

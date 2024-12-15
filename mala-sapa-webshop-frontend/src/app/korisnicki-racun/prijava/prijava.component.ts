@@ -21,7 +21,8 @@ export class PrijavaComponent implements OnInit {
 
   kreirajPrijavaFormu() {
     this.prijavaForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.pattern('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')]),
+      // email: new FormControl('', [Validators.required, Validators.pattern('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')]),
+      email: new FormControl('', [Validators.required]),
       lozinka: new FormControl('', [Validators.required])
     });
   }

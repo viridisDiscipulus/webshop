@@ -13,6 +13,7 @@ export class BlagajnaDostavaComponent implements OnInit {
 
   @Input() blagajnaForm: FormGroup;
   naciniIsporuke: INacinIsporuke[];
+  napomene: string[] = []; 
 
   constructor(private blagajnaService: BlagajnaService, private kosaricaService: KosaricaService) { }
 
@@ -31,6 +32,10 @@ export class BlagajnaDostavaComponent implements OnInit {
 
   saveNacinIsporukeToLocalStorage(nacinIsporukeID: number) {
     localStorage.setItem('nacinIsporukeID', nacinIsporukeID.toString());
+  }
+
+  onDodajNapomenu(napomena: string): void {
+    this.napomene.push(napomena);
   }
 
  

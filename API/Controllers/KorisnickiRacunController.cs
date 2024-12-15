@@ -34,7 +34,7 @@ namespace API.Controllers
             if (string.IsNullOrEmpty(email))
                 return Unauthorized(new ApiResponse(401));
 
-            var korisnik = await _korisnikService.GetKorisnikByEmailAsync(email);
+            var korisnik = await _korisnikService.GetKorisnikByEmailAsync(email, string.Empty);
 
             if (korisnik == null)
                 return Unauthorized(new ApiResponse(401));
@@ -97,12 +97,12 @@ namespace API.Controllers
         [HttpPost("prijava")]
         public async Task<ActionResult<KorisnikPovratniModel>> Login(PrijavaPovratniModel prijava)
         {
-            var korisnik = await _korisnikService.GetKorisnikByEmailAsync(prijava.Email);
+            var korisnik = await _korisnikService.GetKorisnikByEmailAsync(prijava.Email, prijava.Lozinka);
 
             // if (korisnik == null || !await _korisnikService.ValidirajLozinkuAsync(korisnik, prijava.Lozinka))
             //     return Unauthorized(new ApiResponse(401));
 
-            if (korisnik == null || korisnik.Lozinka != prijava.Lozinka)
+            if (korisnik == null)
                 return Unauthorized(new ApiResponse(401));
 
             return new KorisnikPovratniModel

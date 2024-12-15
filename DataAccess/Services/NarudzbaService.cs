@@ -216,7 +216,35 @@ namespace DataAccess.Services
 
         public async Task<Narudzba> GetNarudzbaByIdAsync(int id, string email)
         {
-             string query = @"
+            string query = string.Empty;
+
+            #region Secure query
+            //  query = @"
+            //    SELECT  n.[Id]
+            //             ,n.[KupacEmail]
+            //             ,n.[DatumNarudzbe]
+            //             ,a.[iD] AS AdresaDostaveId
+			// 			,ISNULL(a.[Ime], '') AS Ime
+            //             ,ISNULL(a.[Prezime], '') AS Prezime
+            //             ,ISNULL(a.[Ulica], '') AS Ulica
+            //             ,ISNULL(a.[Grad], '') AS Grad
+            //             ,ISNULL(a.[PostanskiBroj], '') AS PostanskiBroj
+            //             ,ISNULL(a.[Drzava], '') AS Drzava
+            //             ,i.[iD] AS NacinIsporukeId
+            //             ,i.[KratkiNaziv]
+            //             ,i.[VrijemeDostave]
+            //             ,i.[Opis]
+            //             ,i.[Cijena]
+            //             ,n.[NaruceniArtikliId]
+            //             ,n.[UkupnaCijena]
+            //             ,n.[Status]
+            //         FROM [dbo].[Narudzba] n
+            //         LEFT JOIN [dbo].[Adrese] a ON n.AdresaDostaveId = 0
+            //         LEFT JOIN [dbo].[NacinIsporuke] i ON n.NacinIsporukeId = i.Id
+            //         WHERE n.[Id] = @ID AND [KupacEmail] = @Email;";
+            #endregion
+
+             query = @"
                SELECT  n.[Id]
                         ,n.[KupacEmail]
                         ,n.[DatumNarudzbe]
@@ -238,8 +266,8 @@ namespace DataAccess.Services
                     FROM [dbo].[Narudzba] n
                     LEFT JOIN [dbo].[Adrese] a ON n.AdresaDostaveId = 0
                     LEFT JOIN [dbo].[NacinIsporuke] i ON n.NacinIsporukeId = i.Id
-                    WHERE n.[Id] = @ID AND [KupacEmail] = @Email;";
-                    
+                    WHERE n.[Id] = @ID";
+
                 var narudzba = await _narudzbaService.UcitajPoIdAsync(query, dr => new Narudzba
                 {
                     Id = (int)dr["Id"],
@@ -264,7 +292,9 @@ namespace DataAccess.Services
                     NaruceniArtikliId = (string)dr["NaruceniArtikliId"],
                     UkupnaCijena = (decimal)dr["UkupnaCijena"],
                     Status = ParseEnumFromEnumMember<StatusNarudzbe>(dr["Status"].ToString())
-                }, new SqlParameter("@ID", id), new SqlParameter("@Email", email));
+                }, new SqlParameter("@ID", id)
+                //  ,new SqlParameter("@Email", email)
+                 );
                
                return narudzba;
         }
@@ -418,7 +448,58 @@ namespace DataAccess.Services
             return narudzbe;
         }
 
+        public async Task<List<Narudzba>> GetNarudzbeKupcaZaAdministratoraAsync(){
+             string query = @"
+               SELECT  n.[Id]
+                        ,n.[KupacEmail]
+                        ,n.[DatumNarudzbe]
+                        ,ISNULL(a.[iD], 1) AS AdresaDostaveId
+						,ISNULL(a.[Ime], '') AS Ime
+                        ,ISNULL(a.[Prezime], '') AS Prezime
+                        ,ISNULL(a.[Ulica], '') AS Ulica
+                        ,ISNULL(a.[Grad], '') AS Grad
+                        ,ISNULL(a.[PostanskiBroj], '') AS PostanskiBroj
+                        ,ISNULL(a.[Drzava], '') AS Drzava
+                        ,i.[iD] AS NacinIsporukeId
+                        ,i.[KratkiNaziv]
+                        ,i.[VrijemeDostave]
+                        ,i.[Opis]
+                        ,i.[Cijena]
+                        ,ISNULL(n.[NaruceniArtikliId], 0) AS NaruceniArtikliId
+                        ,n.[UkupnaCijena]
+                        ,n.[Status]
+                    FROM [dbo].[Narudzba] n
+                    LEFT JOIN [dbo].[Adrese] a ON n.AdresaDostaveId = 0
+                    LEFT JOIN [dbo].[NacinIsporuke] i ON n.NacinIsporukeId = i.Id";
 
+                var narudzba = await _narudzbaService.UcitajSveAsync(query, dr => new Narudzba
+                {
+                    Id = (int)dr["Id"],
+                    KupacEmail = (string)dr["KupacEmail"],
+                    DatumNarudzbe = (DateTimeOffset)dr["DatumNarudzbe"],
+                    AdresaDostave = new Adresa {
+                        Id = (int)dr["AdresaDostaveId"],
+                        Ime = (string)dr["Ime"],
+                        Prezime = (string)dr["Prezime"],
+                        Ulica = (string)dr["Ulica"],
+                        Grad = (string)dr["Grad"],
+                        PostanskiBroj = (string)dr["PostanskiBroj"],
+                        Drzava = (string)dr["Drzava"]
+                    },
+                    NacinIsporuke = new NacinIsporuke{
+                        Id = (int)dr["NacinIsporukeId"],
+                        KratkiNaziv = (string)dr["KratkiNaziv"],
+                        VrijemeDostave = (string)dr["VrijemeDostave"],
+                        Opis = (string)dr["Opis"],
+                        Cijena = (decimal)dr["Cijena"]
+                    },
+                    NaruceniArtikliId = (string)dr["NaruceniArtikliId"],
+                    UkupnaCijena = (decimal)dr["UkupnaCijena"],
+                    Status = ParseEnumFromEnumMember<StatusNarudzbe>(dr["Status"].ToString())
+                });
+
+              return (List<Narudzba>)narudzba;;
+        }
         public static TEnum ParseEnumFromEnumMember<TEnum>(string value) where TEnum : Enum
             {
                 foreach (var field in typeof(TEnum).GetFields())

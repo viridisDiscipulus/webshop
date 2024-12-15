@@ -20,24 +20,42 @@
         </ng-container>
     
         <ng-container *ngIf="trenutniKorisnik$ | async">
-          <div class="dropdown ml-3 mr-5" dropdown>
-            <a class="dropdown-toggle" style="cursor: pointer" dropdownToggle>
-              <strong style="color: white;">Dobrodošli {{(trenutniKorisnik$ | async).alias}}</strong>  
-            </a>
-            <div class="dropdown-menu dropdown-menu-right" style="cursor: pointer; background-color: #55404f;" *dropdownMenu>
-              <a routerLink="/kosarica" class="dropdown-item d-flex align-items-center py-2">
-                <i class="fa fa-shopping-cart mr-3" style="color: #FE17BD;"></i> 
-                Pregled košarice</a>
-              <a routerLink="/narudzbe" class="dropdown-item d-flex align-items-center py-2">
-                <i class="fa fa-history mr-3" style="color: #FE17BD;"></i> 
-                Pregled narudžbi</a>
-              <div class="dropdown-divider"></div>
-              <a (click)="odjava()" class="dropdown-item d-flex align-items-center py-2" style="color: white !important;">
-                <i class="fa fa-sign-out mr-3" style="color: #FE17BD;"></i>
-                Odjava</a>
+          <ng-container *ngIf="isAdmin">
+            <div class="dropdown ml-3 mr-5" dropdown>
+              <a class="dropdown-toggle" style="cursor: pointer" dropdownToggle>
+                <strong style="color: white;">Postavke {{(trenutniKorisnik$ | async).alias}}</strong>  
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" style="cursor: pointer; background-color: #55404f;" *dropdownMenu>
+                <a routerLink="/narudzbe" class="dropdown-item d-flex align-items-center py-2">
+                  <i class="fa fa-history mr-3" style="color: #FE17BD;"></i> 
+                  Pregled narudžbi</a>
+                <div class="dropdown-divider"></div>
+                <a (click)="odjava()" class="dropdown-item d-flex align-items-center py-2" style="color: white !important;">
+                  <i class="fa fa-sign-out mr-3" style="color: #FE17BD;"></i>
+                  Odjava</a>
+              </div>
             </div>
-          </div>
-        
+          </ng-container>
+          <ng-container *ngIf="!isAdmin">
+            <div class="dropdown ml-3 mr-5" dropdown>
+              <a class="dropdown-toggle" style="cursor: pointer" dropdownToggle>
+                <strong style="color: white;">Dobrodošli {{(trenutniKorisnik$ | async).alias}}</strong>  
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" style="cursor: pointer; background-color: #55404f;" *dropdownMenu>
+                <a routerLink="/kosarica" class="dropdown-item d-flex align-items-center py-2">
+                  <i class="fa fa-shopping-cart mr-3" style="color: #FE17BD;"></i> 
+                  Pregled košarice</a>
+                <a routerLink="/narudzbe" class="dropdown-item d-flex align-items-center py-2">
+                  <i class="fa fa-history mr-3" style="color: #FE17BD;"></i> 
+                  Pregled svih narudžbi</a>
+                <div class="dropdown-divider"></div>
+                <a (click)="odjava()" class="dropdown-item d-flex align-items-center py-2" style="color: white !important;">
+                  <i class="fa fa-sign-out mr-3" style="color: #FE17BD;"></i>
+                  Odjava</a>
+              </div>
+            </div>
+          </ng-container>
+
         </ng-container>
     
       </div>

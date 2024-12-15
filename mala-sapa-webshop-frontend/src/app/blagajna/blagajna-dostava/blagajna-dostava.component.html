@@ -15,6 +15,19 @@
             </label>
         </div>
     </div>
+    <div class="py-4">
+        <h6 style="font-weight: 600">Napomena</h6>
+        <div>
+            <input type="text" #napomenaInput class="form-control" placeholder="Ostavi napomenu" />
+            <button class="btn btn-primary mt-2 btn-sm" style="background-color: #FE17BD; color:white; cursor: pointer;" (click)="onDodajNapomenu(napomenaInput.value)">Dodaj napomenu</button>
+        </div>
+        <div class="my-3">
+            <h6>Sve napomene</h6>
+            <div class="pb-5" *ngFor="let napomena of napomene">
+                <div [innerHTML]="napomena"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="float-none d-flex justify-content-between flex-column flex-lg-row mb-5">

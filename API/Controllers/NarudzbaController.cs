@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
 
-    [Authorize]
+    // [Authorize]
     public class NarudzbaController : BaseApiController
     {
         private readonly INarudzbaService _narudzbaService;
@@ -75,7 +75,9 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<NarudzbaPovratPovratniModel>> GetNarudzbaByIdAsync(int id)
         {
-            var email = HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+            // var email = HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+
+            var email = "";
 
             var narudzba = await _narudzbaService.GetNarudzbaByIdAsync(id, email);
 
@@ -105,6 +107,22 @@ namespace API.Controllers
             return Ok(true);
         }
 
+       [HttpGet("admin")]
+        public async Task<ActionResult<List<NarudzbaPovratPovratniModel>>> GetNarudzbeKupacaZaAdministratora([FromQuery] string email)
+        {
+            // var email = HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
 
-    }
+            var isAdmin = email.Contains("admin"); 
+            if (!isAdmin)
+            {
+                return Unauthorized(new ApiResponse(403, "Nemate dozvolu za pristup ovom resursu."));
+            }
+
+            var narudzbe = await _narudzbaService.GetNarudzbeKupcaZaAdministratoraAsync();
+
+            narudzbe = await _narudzbaService.UcitajArtikleNarudzbi(narudzbe);
+
+            return Ok(_mapper.Map<List<Narudzba>, List<NarudzbaPovratPovratniModel>>(narudzbe));
+        }
+            }
 }

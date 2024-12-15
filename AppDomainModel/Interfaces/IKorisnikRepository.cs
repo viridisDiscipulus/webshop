@@ -6,12 +6,12 @@ namespace AppDomainModel.Interfaces
 {
     public interface IKorisnikRepository
     {
-        Task<Korisnik> GetKorisnikByEmailAsync(string email);
+        Task<Korisnik> GetKorisnikByEmailAsync(string email, string lozinka);
         Task<bool> CheckEmailExistsAsync(string email);
         Task<Korisnik> GetKorisnikSaAdresomAsync(string email);
         Task<bool> CreateKorisnikAsync(Korisnik korisnik);
         Task<bool> UpdateKorisnikAsync(Korisnik korisnik);
-        Task<bool> ValidirajLozinkuAsync(Korisnik korisnik, string lozinka);
-        Task<string> HashirajLozinkuAsync(string lozinka);
+
+
     }
 }

@@ -26,9 +26,9 @@ namespace DataAccess.Services
             return _korisnikRepository.CreateKorisnikAsync(korisnik);
         }
 
-        public Task<Korisnik> GetKorisnikByEmailAsync(string email)
+        public Task<Korisnik> GetKorisnikByEmailAsync(string email, string lozinka)
         {
-            return _korisnikRepository.GetKorisnikByEmailAsync(email);
+            return _korisnikRepository.GetKorisnikByEmailAsync(email, lozinka);
         }
 
         public Task<Korisnik> GetKorisnikSaAdresomAsync(string email)
@@ -36,19 +36,9 @@ namespace DataAccess.Services
             return _korisnikRepository.GetKorisnikSaAdresomAsync(email);
         }
 
-        public Task<string> HashirajLozinkuAsync(string lozinka)
-        {
-            return _korisnikRepository.HashirajLozinkuAsync(lozinka);
-        }
-
         public Task<bool> UpdateKorisnikAsync(Korisnik korisnik)
         {
            return _korisnikRepository.UpdateKorisnikAsync(korisnik);
-        }
-
-        public Task<bool> ValidirajLozinkuAsync(Korisnik korisnik, string lozinka)
-        {
-            return _korisnikRepository.ValidirajLozinkuAsync(korisnik, lozinka);
         }
     }
 }

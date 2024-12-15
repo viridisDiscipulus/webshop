@@ -14,6 +14,8 @@ namespace AppDomainModel.Interfaces
         Task<IReadOnlyList<NacinIsporuke>> GetNacineIsporukeAsync();
         Task<Narudzba> UcitajArtikleNarudzbe(Narudzba narudzba);
         Task<List<Narudzba>> UcitajArtikleNarudzbi(List<Narudzba> narudzbe);
+        Task<List<Narudzba>> GetNarudzbeKupcaZaAdministratoraAsync();
+
 
     }
 }

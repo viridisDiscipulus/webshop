@@ -18,25 +18,77 @@ namespace DataAccess.Repositories
             _dbConnection = dbConnection;
         }
 
-        public async Task<Korisnik> GetKorisnikByEmailAsync(string email)
+        public async Task<Korisnik> GetKorisnikByEmailAsync(string email, string lozinka)
         {
-            const string query =
-                @"SELECT  
-                    k.Id,
-                    k.Alias,
-                    k.KorisnickoIme,
-                    k.Lozinka,
-                    k.Email,
-                    k.AdresaID
-                FROM Korisnici k 
-                WHERE Email = @email";
+            #region SecureQuery
+            // const string query =
+            //     @"SELECT  
+            //         k.Id,
+            //         k.Alias,
+            //         k.KorisnickoIme,
+            //         k.Lozinka,
+            //         k.Email,
+            //         k.AdresaID
+            //     FROM Korisnici k 
+            //     WHERE Email = @email";
+
+            // await using var connection = new SqlConnection(_dbConnection.ConnectionString);
+            // await connection.OpenAsync();
+
+            // using var command = new SqlCommand(query, connection);
+            // command.Parameters.AddWithValue("@Email", email);
+
+            // using var dr = await command.ExecuteReaderAsync();
+            // if (await dr.ReadAsync())
+            // {
+            //     return new Korisnik
+            //     {
+            //         Id = dr["Id"].ToString(),
+            //         Alias = dr["Alias"].ToString(),
+            //         KorisnickoIme = dr["KorisnickoIme"].ToString(),
+            //         Lozinka = dr["Lozinka"].ToString(),
+            //         Email = dr["Email"].ToString(),
+            //         AdresaId = dr.GetInt32(dr.GetOrdinal("AdresaID"))
+            //     };
+            // }
+
+            // return null;
+            #endregion
+
+            string query = string.Empty;
+
+            if (string.IsNullOrEmpty(lozinka)){
+                    query = $@"
+                                SELECT  
+                                    k.Id,
+                                    k.Alias,
+                                    k.KorisnickoIme,
+                                    k.Lozinka,
+                                    k.Email,
+                                    k.AdresaID
+                                FROM Korisnici k 
+                                WHERE Email = '{email}'";
+                }
+            else{
+                    query = $@"
+                                SELECT  
+                                    k.Id,
+                                    k.Alias,
+                                    k.KorisnickoIme,
+                                    k.Lozinka,
+                                    k.Email,
+                                    k.AdresaID
+                                FROM Korisnici k 
+                                WHERE Email = '{email}'
+                                AND Lozinka = '{HashirajLozinkuAsync(lozinka)}'";
+
+                }
+
+              
 
             await using var connection = new SqlConnection(_dbConnection.ConnectionString);
             await connection.OpenAsync();
-
-            using var command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@Email", email);
-
+            using var command = new SqlCommand(query, connection); 
             using var dr = await command.ExecuteReaderAsync();
             if (await dr.ReadAsync())
             {
@@ -155,7 +207,7 @@ namespace DataAccess.Repositories
                     command.Parameters.AddWithValue("@Id", korisnik.Id);
                     command.Parameters.AddWithValue("@Alias", korisnik.Alias);
                     command.Parameters.AddWithValue("@KorisnickoIme", korisnik.KorisnickoIme);
-                    command.Parameters.AddWithValue("@Lozinka", korisnik.Lozinka);
+                    command.Parameters.AddWithValue("@Lozinka", HashirajLozinkuAsync(korisnik.Lozinka));
                     command.Parameters.AddWithValue("@Email", korisnik.Email);
                     command.Parameters.AddWithValue("@AdresaID", -1);
 
@@ -243,7 +295,7 @@ namespace DataAccess.Repositories
                             korisnikCommand.Parameters.AddWithValue("@Id", korisnik.Id);
                             korisnikCommand.Parameters.AddWithValue("@Alias", korisnik.Alias ?? (object)DBNull.Value);
                             korisnikCommand.Parameters.AddWithValue("@KorisnickoIme", korisnik.KorisnickoIme);
-                            korisnikCommand.Parameters.AddWithValue("@Lozinka", korisnik.Lozinka);
+                            korisnikCommand.Parameters.AddWithValue("@Lozinka", HashirajLozinkuAsync(korisnik.Lozinka));
                             korisnikCommand.Parameters.AddWithValue("@Email", korisnik.Email);
                             korisnikCommand.Parameters.AddWithValue("@AdresaID", korisnik.AdresaId > 0 ? korisnik.AdresaId : -1);
 
@@ -262,28 +314,24 @@ namespace DataAccess.Repositories
             }
         }
 
-        public async Task<bool> ValidirajLozinkuAsync(Korisnik korisnik, string lozinka)
+        public bool ValidirajLozinkuAsync(Korisnik korisnik, string lozinka)
         {
-            //    var hashedLozinka =  await HashirajLozinkuAsync(lozinka);
+               var hashedLozinka =  HashirajLozinkuAsync(lozinka);
 
-            //     return korisnik.Lozinka == hashedLozinka;
-
-            return await Task.Run(() => true);
-
+                return korisnik.Lozinka == hashedLozinka;
         }
 
-        public async Task<string> HashirajLozinkuAsync(string lozinka)
+        public string HashirajLozinkuAsync(string lozinka)
         {
-            return await Task.Run(() =>
             {
-                using (var sha256 = SHA256.Create())
+                using (var md5 = MD5.Create())
                 {
-                    byte[] lozinkaBytes = Encoding.UTF8.GetBytes(lozinka);
-                    byte[] hashedBytes = sha256.ComputeHash(lozinkaBytes);
+                    byte[] lozinkaBytes = Encoding.ASCII.GetBytes(lozinka);
+                    byte[] hashedBytes = md5.ComputeHash(lozinkaBytes);
 
                     return Convert.ToBase64String(hashedBytes);
                 }
-            });
+            }
         }
     }
 }
