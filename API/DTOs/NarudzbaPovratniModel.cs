@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AppDomainModel.Models;
 
 namespace API.DTOs
 {
@@ -10,5 +7,6 @@ namespace API.DTOs
         public string KosaricaId { get; set; }
         public int NacinIsporukeId { get; set; }
         public AdresaPovratniModel AdresaDostave { get; set; }
+        public Placanje Placanje { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using API.DTOs;
 using AppDomainModel.Interfaces;
@@ -10,12 +11,14 @@ namespace API.Controllers
     public class KosaricaController : BaseApiController
     {
         private readonly IKosaricaRepository _kosaricaRepository;
+        private readonly INarudzbaService _narudzbaService;
         private readonly IMapper _mapper;
 
-        public KosaricaController(IKosaricaRepository kosaricaRepository, IMapper mapper)
+        public KosaricaController(IKosaricaRepository kosaricaRepository, INarudzbaService narudzbaService, IMapper mapper)
         {
             _mapper = mapper;
             _kosaricaRepository = kosaricaRepository;
+            _narudzbaService = narudzbaService;
         }
 
         [HttpGet]

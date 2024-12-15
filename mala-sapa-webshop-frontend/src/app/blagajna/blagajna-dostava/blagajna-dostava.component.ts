@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BlagajnaService } from '../blagajna.service';
 import { INacinIsporuke } from 'src/app/shared/models/nacinIsporuke';
-import { Kosarica } from 'src/app/shared/models/kosarica';
 import { KosaricaService } from 'src/app/kosarica/kosarica.service';
 
 @Component({
@@ -14,7 +13,7 @@ export class BlagajnaDostavaComponent implements OnInit {
 
   @Input() blagajnaForm: FormGroup;
   naciniIsporuke: INacinIsporuke[];
-  
+
   constructor(private blagajnaService: BlagajnaService, private kosaricaService: KosaricaService) { }
 
   ngOnInit(): void {
@@ -27,6 +26,12 @@ export class BlagajnaDostavaComponent implements OnInit {
 
   postaviCijenuDostave(nacinDostave: INacinIsporuke) {
     this.kosaricaService.postaviCijenuDostave(nacinDostave);
+    this.saveNacinIsporukeToLocalStorage(nacinDostave.id);
   }
 
+  saveNacinIsporukeToLocalStorage(nacinIsporukeID: number) {
+    localStorage.setItem('nacinIsporukeID', nacinIsporukeID.toString());
+  }
+
+ 
 }

@@ -1,10 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { KosaricaService } from 'src/app/kosarica/kosarica.service';
 import { IKosarica } from 'src/app/shared/models/kosarica';
 import { BlagajnaService } from '../blagajna.service';
-import { INarudzba, INarudzbaZaKreiranje } from 'src/app/shared/models/narudzba';
+import { INarudzba, INarudzbaZaKreiranje, IPlacanje } from 'src/app/shared/models/narudzba';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -12,9 +12,10 @@ import { FormGroup } from '@angular/forms';
   templateUrl: './blagajna-placanje.component.html',
   styleUrls: ['./blagajna-placanje.component.scss']
 })
-export class BlagajnaPlacanjeComponent implements OnInit {
+export class BlagajnaPlacanjeComponent implements AfterViewInit {
   @Input() blagajnaForm: FormGroup;
-  ucitavanje: boolean;
+  placanjeData: IPlacanje;
+  preduvjetiZaNarudzbu: boolean = false;
 
   constructor(
     private kosaricaService: KosaricaService,
@@ -22,7 +23,22 @@ export class BlagajnaPlacanjeComponent implements OnInit {
     private toastr: ToastrService,
     private router: Router) { }
 
-  ngOnInit(): void {
+
+  ngAfterViewInit(): void {
+  }
+
+
+  predradnjeZaNarudzbu(){
+    if(!this.provjeriUnosPodatakaKartice())
+      return;
+
+    this.provjeriPodatkeSaPlatnimSustavom();
+
+    if(!this.preduvjetiZaNarudzbu)
+      return;
+    else 
+      this.predajNarudzbu();
+    
   }
 
   async predajNarudzbu() {
@@ -50,11 +66,51 @@ export class BlagajnaPlacanjeComponent implements OnInit {
         kosaricaId: kosarica.id,
         nacinIsporukeId: +this.blagajnaForm.get('nacinIsporukeForm').get('nacinIsporuke').value,
         adresaDostave: this.blagajnaForm.get('adresaForm').value,
+        placanje: this.blagajnaForm.get('placanjeForm').value,
       };
     } catch (error) {
-      this.toastr.error('Došlo je do greške prilikom kreiranja objekta narudžbe');
+      this.toastr.error('Došlo je do greške prilikom plaćanja.');
       console.log(error);
       throw error;
     }
   }
+
+  provjeriUnosPodatakaKartice(): boolean {
+    const podaciPlacanjaZaNarudzbu = this.blagajnaForm.get('placanjeForm')?.value;
+  
+    if (!podaciPlacanjaZaNarudzbu.vlasnikKartice || !podaciPlacanjaZaNarudzbu.brojKartice || !podaciPlacanjaZaNarudzbu.datumIsteka || !podaciPlacanjaZaNarudzbu.cvv) {
+      this.handleError('Podaci plaćanja nisu uneseni');
+      return false;
+    }
+  
+    this.placanjeData = {
+      vlasnikKartice: podaciPlacanjaZaNarudzbu.vlasnikKartice,
+      brojKartice: podaciPlacanjaZaNarudzbu.brojKartice,
+      datumIsteka: podaciPlacanjaZaNarudzbu.datumIsteka,
+      cvv: podaciPlacanjaZaNarudzbu.cvv,
+    };
+    
+    return true;
+  }
+  
+  async provjeriPodatkeSaPlatnimSustavom() {
+    try {
+      const placanje: IPlacanje | null = await this.blagajnaService.provjeriPodatkePlacanja(this.placanjeData).toPromise();
+  
+      if (!placanje) {
+        return;
+      }
+      this.preduvjetiZaNarudzbu = true;
+    } catch (error) {
+      this.handleError('Greška prilikom provjere podataka plaćanja', error);
+    }
+  }
+
+  private handleError(message: string, error?: any): void {
+    this.toastr.error(message);
+    if (error) console.error(error);
+  }
+  
 }
+
+

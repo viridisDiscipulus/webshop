@@ -45,36 +45,5 @@ namespace DataAccess.Services
 
             return tokenHandler.WriteToken(token);
         }
-
-        // public ClaimsPrincipal ValidateToken(string token)
-        // {
-        //     var tokenHandler = new JwtSecurityTokenHandler();
-        //     var validationParameters = new TokenValidationParameters
-        //     {
-        //         ValidateIssuerSigningKey = true,
-        //         IssuerSigningKey = _key,
-        //         ValidIssuer = _config["Token:Issuer"],
-        //         ValidateIssuer = true,
-        //         ValidateAudience = false
-        //     };
-
-        //     try
-        //     {
-        //         var principal = tokenHandler.ValidateToken(token, validationParameters, out var validatedToken);
-
-        //         // Ensure the token is a valid JWT token
-        //         if (validatedToken is JwtSecurityToken jwtToken && 
-        //             jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-        //         {
-        //             return principal;
-        //         }
-
-        //         throw new SecurityTokenException("Invalid token");
-        //     }
-        //     catch
-        //     {
-        //         return null;
-        //     }
-        // }
     }
 }

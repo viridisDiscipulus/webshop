@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { INacinIsporuke } from '../shared/models/nacinIsporuke';
 import { map } from 'rxjs/operators';
-import { INarudzbaZaKreiranje } from '../shared/models/narudzba';
+import { INarudzbaZaKreiranje, IPlacanje } from '../shared/models/narudzba';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,16 @@ export class BlagajnaService {
 
   kreirajNarudzbu(narudzba: INarudzbaZaKreiranje) {
     return this.http.post(this.baseUrl + 'narudzba', narudzba);
+  }
+
+  provjeriPodatkePlacanja(placanje: IPlacanje): Observable<IPlacanje> {
+    const params = new HttpParams()
+      .set('vlasnikKartice', placanje.vlasnikKartice)
+      .set('brojKartice', placanje.brojKartice)
+      .set('datumIsteka', placanje.datumIsteka)
+      .set('cvv', placanje.cvv);
+  
+    return this.http.get<IPlacanje>(this.baseUrl + 'narudzba/placanje', { params });
   }
 
 

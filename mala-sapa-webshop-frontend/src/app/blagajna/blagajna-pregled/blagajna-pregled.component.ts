@@ -20,12 +20,5 @@ export class BlagajnaPregledComponent implements OnInit {
     this.kosarica$ = this.kosaricaService.kosarica$;
   }
 
-  createPaymentIntent() {
-    return this.kosaricaService.createPaymentIntent().subscribe((response: any) => {
-      this.appStepper.next();
-    }, error => {
-      console.log(error);
-    });
-  }
 
 }

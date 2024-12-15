@@ -1,65 +1,72 @@
 <ng-container *ngIf="artikli.length > 0">
     <div class="table-response">
         <table class="tabl table-borderless">
-            <thead [class.thead-light]="narudzbaBool || kosaricaBool" class="border-0 py-2">
+            <thead>
                 <tr>
-                    <th class="border-0" scope="col">
+                    <th scope="col" class="border-0 px-4" [class.bg-light]="kosaricaBool || narudzbaBool">
                         <div class="p-2 px-3 text-uppercase">Proizvod</div>
                     </th>
-                    <th scope="col" class="border-0">
+                    <th scope="col" class="border-0 px-4" [class.bg-light]="kosaricaBool || narudzbaBool">
                         <div class="py-2 text-uppercase">Cijena</div>
                     </th>
-                    <th scope="col" class="border-0">
+                    <th scope="col" class="border-0 px-4" [class.bg-light]="kosaricaBool || narudzbaBool">
                         <div class="py-2 text-uppercase">Količina</div>
                     </th>
-                    <th scope="col" class="border-0">
+                    <th scope="col" class="border-0 px-4"  [class.bg-light]="kosaricaBool || narudzbaBool">
                         <div class="py-2 text-uppercase">Ukupno</div>
-                    </th>   
-                    <th *ngIf="kosaricaBool"  scope="col" class="border-0">
+                    </th>
+                    <th *ngIf="kosaricaBool" scope="col" class="border-0 px-4" [class.bg-light]="kosaricaBool || narudzbaBool">
                         <div class="py-2 text-uppercase">Uklonite proizvod</div>
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let artikl of artikli" class="border-0">
-                    <th scope="row">
-                        <div class="p-2">
-                            <img src="{{artikl.slikaUrl}}" alt="{{artikl.proizvodNaziv}}" class="img-fluid" style="max-height: 50px ;">
+                    <th scope="row px-4">
+                        <div class="p-0">
+                            <img src="{{ artikl.slikaUrl }}" alt="{{ artikl.proizvodNaziv }}" class="img-fluid"
+                                style="max-height: 50px" />
                             <div class="ml-3 d-inline-block align-middle">
                                 <h5 class="mb-0">
-                                    <a routerLink="/webshop/{{artikl.id || artikl.proizvodId}}" class="text-dark">{{artikl.proizvodNaziv}}</a>
+                                    <a routerLink="/webshop/{{ artikl.id || artikl.proizvodId }}" class="text-dark">{{
+                                        artikl.proizvodNaziv }}</a>
                                 </h5>
-                                <span
-                                *ngIf="artikl.vrstaProizvoda"
-                                class="text-muted font-weight-normal font-italic d-block">Vrsta proizvoda: {{artikl.vrstaProizvoda}}
+                                <span *ngIf="artikl.vrstaProizvoda"
+                                    class="text-muted font-weight-normal font-italic d-block">{{
+                                    artikl.vrstaProizvoda }}
                                 </span>
                             </div>
                         </div>
                     </th>
-                    <td class="align-middle">
-                        <strong>{{artikl.cijena | currency: 'EUR'}}</strong>
+                    <td class="align-middle px-4">
+                        <strong>{{ artikl.cijena | currency : "EUR" }}</strong>
                     </td>
-                    <td class="align-middle">
-                        <div class="d-flex align-items-center" 
-                            [class.justify-content-center]="!kosaricaBool">
-                            <i *ngIf="kosaricaBool" (click)="umanjiKolicinuArtikla(artikl)" class="fa fa-minus-circle text-warning mr-2" style="cursor: pointer; font-size: 1.5em;"></i>
-                                <span class="font-weight-bold" style="font-size: 1.5em;">
-                                    {{artikl.kolicina}}
-                                </span>
-                            <i *ngIf="kosaricaBool"  (click)="uvecajKolicinuArtikla(artikl)" class="fa fa-plus-circle text-warning mx-2" style="cursor: pointer; font-size: 1.5em;"></i>
+                    <td class="align-middle px-4">
+                        <div class="d-flex align-items-center" [class.justify-content-center]="!kosaricaBool">
+                            <i *ngIf="kosaricaBool" (click)="umanjiKolicinuArtikla(artikl)"
+                                class="fa fa-minus-circle text-warning mr-2"
+                                style="cursor: pointer; font-size: 1.5em"></i>
+                            <span class="font-weight-bold" style="font-size: 1.5em">
+                                {{ artikl.kolicina }}
+                            </span>
+                            <i *ngIf="kosaricaBool" (click)="uvecajKolicinuArtikla(artikl)"
+                                class="fa fa-plus-circle text-warning mx-2"
+                                style="cursor: pointer; font-size: 1.5em"></i>
                         </div>
                     </td>
-                    <td class="align-middle">
-                        <strong>{{artikl.cijena * artikl.kolicina | currency: 'EUR'}}</strong>
+                    <td class="align-middle px-4">
+                        <strong>{{
+                            artikl.cijena * artikl.kolicina | currency : "EUR"
+                            }}</strong>
                     </td>
-                    <td class="align-middle text-center">
+                    <td class="align-middle text-center px-4">
                         <a class="text-danger">
-                            <i *ngIf="kosaricaBool"  (click)="ukloniArtiklIzKosarice(artikl)" class="fa fa-trash" style="font-size: 1.5em; cursor: pointer;"></i>
+                            <i *ngIf="kosaricaBool" (click)="ukloniArtiklIzKosarice(artikl)" class="fa fa-trash"
+                                style="font-size: 1.5em; cursor: pointer"></i>
                         </a>
                     </td>
-                </tr>    
+                </tr>
             </tbody>
         </table>
     </div>
 </ng-container>
-

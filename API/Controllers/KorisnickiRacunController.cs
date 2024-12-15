@@ -99,7 +99,10 @@ namespace API.Controllers
         {
             var korisnik = await _korisnikService.GetKorisnikByEmailAsync(prijava.Email);
 
-            if (korisnik == null || !await _korisnikService.ValidirajLozinkuAsync(korisnik, prijava.Lozinka))
+            // if (korisnik == null || !await _korisnikService.ValidirajLozinkuAsync(korisnik, prijava.Lozinka))
+            //     return Unauthorized(new ApiResponse(401));
+
+            if (korisnik == null || korisnik.Lozinka != prijava.Lozinka)
                 return Unauthorized(new ApiResponse(401));
 
             return new KorisnikPovratniModel

@@ -22,7 +22,7 @@ export class NarudzbeDetaljnoComponent implements OnInit {
     this.narudzbeService.getNarudzba(id).subscribe(
       (narudzba: INarudzba) => {
         this.narudzba = narudzba;
-        this.breadcrumbService.set('@Narudžba detaljno', `Narudzba# ${narudzba.id} - ${narudzba.status}`);
+        this.breadcrumbService.set('@Narudžba detaljno', `Narudzba #${narudzba.id} - ${narudzba.status}`);
       },
       (error) => {
         console.error('Error fetching narudzba:', error);

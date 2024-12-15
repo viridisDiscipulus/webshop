@@ -20,8 +20,8 @@ namespace API.Extensions
             services.AddScoped<IKorisnikRepository, KorisnikRepository>();
             services.AddScoped<IKorisnikService, KorisnikService>();
             services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<INarudzbaRepository, NarudzbaRepository>();
             services.AddScoped<INarudzbaService, NarudzbaService>();
+            services.AddScoped<INaplataService, NaplataService>();
             
             services.Configure<ApiBehaviorOptions>(options =>
             {

@@ -1,12 +1,12 @@
-<div class="container mt-5">
-    <div class="fa fa-check-circle fa-5x" style="color: green"></div>
-    <h2>Hvala Vam na kupnji, Vaša narudžba je potvrđena.</h2>
-    <p class="mt-4">
-        <button *ngIf="narudzba" routerLink="/narudzbe/{{narudzba?.id}}" class="btn btn-outline-success">
+<div class="container mt-5 text-center" style="max-width: 800px; margin: auto;">
+    <div class="fa fa-check-circle fa-5x" style="color: green; margin-bottom: 20px;"></div>
+    <h2 style="font-size: 2.5rem; color: #333;">Hvala Vam na kupnji, Vaša narudžba je potvrđena.</h2>
+    <p class="mt-4" style="font-size: 1.2rem; color: #555;">
+        <button *ngIf="narudzba" routerLink="/narudzbe/{{narudzba?.id}}" class="btn btn-outline-success btn-lg" style="margin: 10px;">
             Pregledajte vašu narudžbu
-          </button>
-          
-          
-        <button *ngIf="!narudzba" routerLink="/narudzbe" class="btn btn-outline-success">Pregledajte vaše narudžbe</button>
+        </button>
+        <button *ngIf="!narudzba" routerLink="/narudzbe" class="btn btn-outline-success btn-lg" style="margin: 10px;">
+            Pregledajte vaše narudžbe
+        </button>
     </p>
 </div>

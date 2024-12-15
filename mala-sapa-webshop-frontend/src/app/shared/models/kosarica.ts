@@ -1,8 +1,10 @@
+import { IvyParser } from '@angular/compiler';
 import * as uuid from 'uuid';
 
 export interface IKosarica {
     id: string;
     artikli: IArtiklKosarica[];
+    nacinIsporukeID?: number;
 }
 
 export interface IArtiklKosarica {
@@ -14,6 +16,7 @@ export interface IArtiklKosarica {
     robnaMarka: string;
     vrstaProizvoda: string;
 }
+
 
 export class Kosarica implements IKosarica {
     id: string = uuid.v4(); // Generiraj UUID koristeci v4()

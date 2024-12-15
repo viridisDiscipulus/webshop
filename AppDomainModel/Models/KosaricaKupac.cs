@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using AppDomainModel.Model;
+using AppDomainModel.Models.NarudzbeSkupno;
 
 namespace AppDomainModel.Models
 {
@@ -23,6 +24,11 @@ namespace AppDomainModel.Models
         #region Properties
         public string Id { get => id; set => id = value; }
         public List<KosaricaArtikl> Artikli { get; set; } = new List<KosaricaArtikl>();
-        #endregion    
+        public int? NacinIsporukeID { get; set; }
+        public Placanje Placanje { get; set; } 
+        
+        #endregion
+
+
     }
 }

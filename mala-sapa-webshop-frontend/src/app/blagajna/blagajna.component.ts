@@ -36,8 +36,11 @@ export class BlagajnaComponent implements OnInit {
       nacinIsporukeForm: this.fb.group({
         nacinIsporuke: [null, Validators.required]
       }),
-      placanjeForma: this.fb.group({
-        vlasnikKartice: [null, Validators.required]
+      placanjeForm: this.fb.group({
+        vlasnikKartice: [null, Validators.required],
+        brojKartice: [null, Validators.required],
+        datumIsteka: [null, Validators.required],
+        cvv: [null, Validators.required]
       })
     });
   }
@@ -53,10 +56,9 @@ export class BlagajnaComponent implements OnInit {
   }
 
   getNacinDostavePodaci() {
-    const kosarica = this.kosaricaService.getKosaricaValue();
-    if (kosarica!== null) {
-      // this.blagajnaForm.get('nacinIsporukeForm').get('nacinIsporuke').patchValue(kosarica.artikli.toString());
-     
+    const nacinIsporukeID = localStorage.getItem('nacinIsporukeID');
+    if (nacinIsporukeID) {
+      this.blagajnaForm.get('nacinIsporukeForm').get('nacinIsporuke').patchValue(nacinIsporukeID);
     }
   }
 }

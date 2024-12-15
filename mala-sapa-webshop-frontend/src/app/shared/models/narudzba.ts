@@ -4,6 +4,7 @@ export interface INarudzbaZaKreiranje {
     kosaricaId: string
     nacinIsporukeId: number
     adresaDostave: IAdresa
+    placanje: IPlacanje
   }
   
   export interface INarudzba {
@@ -26,3 +27,10 @@ export interface INarudzbaZaKreiranje {
     cijena: number
     kolicina: number
   }
+
+  export interface IPlacanje {
+    vlasnikKartice: string;
+    brojKartice: string;
+    datumIsteka: string;
+    cvv: string;
+}

@@ -1,11 +1,27 @@
-<p>blagajna-placanje works!</p>
-
-
+<div class="mt-4" [formGroup]="blagajnaForm">
+    <div class="d-flex justify-content-between align-items-center">
+        <h4 class="mb-0 py-3 font-weight-bold">Podaci o naplati</h4>  
+    </div>
+    <div class="row" formGroupName="placanjeForm">
+        <div class="form-group col-6">
+            <app-text-input [label]="'Vlasnik kartice'" formControlName="vlasnikKartice"></app-text-input>
+        </div>
+        <div class="form-group col-6">
+            <app-text-input [label]="'Broj kreditne kartice'" formControlName="brojKartice"></app-text-input>
+        </div>
+        <div class="form-group col-6">
+            <app-text-input [label]="'Datum isteka'" formControlName="datumIsteka"></app-text-input>
+        </div>
+        <div class="form-group col-6">
+            <app-text-input [label]="'CVV'" formControlName="cvv"></app-text-input>
+        </div>
+    </div>
+</div>
 <div class="float-none d-flex justify-content-between flex-column flex-lg-row mb-5">
     <button class="btn btn-outline-primary" cdkStepperPrevious style="background-color: #FE17BD; color:white; cursor: pointer;">
         <i class="fa fa-angle-left"></i> Povratak pregled
     </button>
-    <button class="btn btn-primary" (click)="predajNarudzbu()" cdkStepperNext style="background-color: #FE17BD; color:white; cursor: pointer;">
+    <button class="btn btn-primary" (click)="predradnjeZaNarudzbu()" cdkStepperNext style="background-color: #FE17BD; color:white; cursor: pointer;">
         Završi narudžbu <i class="fa fa-angle-right"></i> 
     </button>
 </div>

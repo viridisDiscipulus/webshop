@@ -12,8 +12,5 @@ namespace API.DTOs
         public string Id { get; set; }
         public List<KosaricaArtiklPovratniModel> Artikli { get; set; }
         public int? VrstaDostaveId { get; set; }
-        public string TajnaKlijenta { get; set; }
-        public string NamjerePlacanjaId { get; set; }
-        public decimal CijenaDostave { get; set; }
     }
 }

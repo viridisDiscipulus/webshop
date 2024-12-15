@@ -57,8 +57,8 @@ export class BlagajnaAdresaComponent implements OnInit {
 
   getNacinDostavePodaci() {
     const kosarica = this.kosaricaService.getKosaricaValue();
-    if (kosarica !== null) {
-      // this.blagajnaForm.get('nacinIsporukeForm').get('nacinIsporuke').patchValue(kosarica.artiklitoString());
+    if (kosarica && kosarica.nacinIsporukeID !== null && kosarica.nacinIsporukeID !== undefined) {
+      this.blagajnaForm.get('nacinIsporukeForm').get('nacinIsporuke').patchValue(kosarica.nacinIsporukeID.toString());
       // console.log(this.blagajnaForm.get('nacinIsporukeForm').get('nacinIsporuke'));
     }
   }
@@ -69,7 +69,6 @@ export class BlagajnaAdresaComponent implements OnInit {
         this.toastr.success('Adresa spremljena');
         this.blagajnaForm.get('adresaForm').reset(adresa);
       }, error => {
-        this.toastr.error(error.message);
         console.log(error);
       });
   }

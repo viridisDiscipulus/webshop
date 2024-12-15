@@ -25,7 +25,7 @@ export class KosaricaService {
       .get(this.baseUrl + 'kosarica?id=' + id)
       .pipe(map((kosarica: IKosarica) => {
         this.kosaricaSource.next(kosarica);
-        console.log(this.getKosaricaValue());
+        // console.log(this.getKosaricaValue());
         this.izracunajSumu();
       }));
     }
@@ -35,7 +35,7 @@ export class KosaricaService {
       .post(this.baseUrl + 'kosarica', kosarica)
       .subscribe((response: IKosarica) => {
         this.kosaricaSource.next(response);
-        console.log(response);
+        // console.log(response);
         this.izracunajSumu();
       }, error => {
         console.log(error);
@@ -55,7 +55,7 @@ export class KosaricaService {
   }
 
   dodajIliAzurirajArtikl(artikli: IArtiklKosarica[], artiklZaDodati: IArtiklKosarica, kolicina: number): IArtiklKosarica[] {
-    console.log(artikli);
+    // console.log(artikli);
     const index = artikli.findIndex(x => x.id === artiklZaDodati.id);
     if (index === -1) {
       artikli.push(artiklZaDodati);
@@ -133,21 +133,11 @@ export class KosaricaService {
     this.kosaricaUkupnoSource.next({dostava, ukupno, ukupnaNarudzba});
   }
 
-  createPaymentIntent() {
-    return this.http.post(this.baseUrl + 'payments/' + this.getKosaricaValue().id, {})
-      .pipe(
-        map((kosarica: IKosarica) => {
-          this.kosaricaSource.next(kosarica);
-        })
-      );
-  }
-
   postaviCijenuDostave(nacinIsporuke: INacinIsporuke) {
     this.isporuka = nacinIsporuke.cijena;
-    // const kosarica = this.getKosaricaValue();
+    const kosarica = this.getKosaricaValue();
+    kosarica.nacinIsporukeID = nacinIsporuke.id;
     this.izracunajSumu();
-    // this.setBasket(basket);
+    this.setKosarica (kosarica);
   }
-
-
 }

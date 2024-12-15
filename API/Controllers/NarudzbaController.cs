@@ -9,6 +9,7 @@ using API.DTOs;
 using API.ErrorTypes;
 using API.Miscellaneous;
 using AppDomainModel.Interfaces;
+using AppDomainModel.Models;
 using AppDomainModel.Models.NarudzbeSkupno;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -21,11 +22,13 @@ namespace API.Controllers
     public class NarudzbaController : BaseApiController
     {
         private readonly INarudzbaService _narudzbaService;
+        private readonly INaplataService _naplataService;
         private readonly IMapper _mapper;
 
-        public NarudzbaController(INarudzbaService narudzbaService, IMapper mapper)
+        public NarudzbaController(INarudzbaService narudzbaService, INaplataService naplataService, IMapper mapper)
         {
             _narudzbaService = narudzbaService;
+            _naplataService = naplataService;
             _mapper = mapper;
         }
 
@@ -88,5 +91,20 @@ namespace API.Controllers
         {
             return Ok(await _narudzbaService.GetNacineIsporukeAsync());
         }
+    
+       [HttpGet("placanje")]
+        public async Task<IActionResult> ProvjeriPodatkePlacanja([FromQuery] Placanje placanjeRequest)
+        {
+            var preduvjetiZaPlacanje = await Task.Run(() => _naplataService.ProvediTransakciju(placanjeRequest));
+
+            if (preduvjetiZaPlacanje == false)
+            {
+                return  Unauthorized(new ApiResponse(401, "Neispravni podaci kartice."));
+            }
+
+            return Ok(true);
+        }
+
+
     }
 }
