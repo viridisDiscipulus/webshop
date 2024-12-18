@@ -15,7 +15,7 @@ import { FormGroup } from '@angular/forms';
 export class BlagajnaPlacanjeComponent implements AfterViewInit {
   @Input() blagajnaForm: FormGroup;
   placanjeData: IPlacanje;
-  preduvjetiZaNarudzbu: boolean = false;
+  preduvjetiZaNarudzbu: boolean;
 
   constructor(
     private kosaricaService: KosaricaService,
@@ -28,17 +28,18 @@ export class BlagajnaPlacanjeComponent implements AfterViewInit {
   }
 
 
-  predradnjeZaNarudzbu(){
-    if(!this.provjeriUnosPodatakaKartice())
+  async predradnjeZaNarudzbu() {
+    if (!this.provjeriUnosPodatakaKartice()) {
       return;
+    }
 
-    this.provjeriPodatkeSaPlatnimSustavom();
+    await this.provjeriPodatkeSaPlatnimSustavom();
 
-    if(!this.preduvjetiZaNarudzbu)
+    if (!this.preduvjetiZaNarudzbu) {
       return;
-    else 
+    } else {
       this.predajNarudzbu();
-    
+    }
   }
 
   async predajNarudzbu() {
@@ -96,13 +97,15 @@ export class BlagajnaPlacanjeComponent implements AfterViewInit {
   async provjeriPodatkeSaPlatnimSustavom() {
     try {
       const placanje: IPlacanje | null = await this.blagajnaService.provjeriPodatkePlacanja(this.placanjeData).toPromise();
-  
-      if (!placanje) {
-        return;
+
+      if (placanje) {
+        this.preduvjetiZaNarudzbu = true;
+      } else {
+        this.preduvjetiZaNarudzbu = false;
       }
-      this.preduvjetiZaNarudzbu = true;
     } catch (error) {
       this.handleError('Greška prilikom provjere podataka plaćanja', error);
+      this.preduvjetiZaNarudzbu = false;
     }
   }
 

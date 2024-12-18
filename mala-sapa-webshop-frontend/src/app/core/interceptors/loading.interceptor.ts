@@ -13,7 +13,6 @@ export class LoadingInterceptor implements HttpInterceptor {
             this.loadService.load();
         }
         return next.handle(req).pipe(
-            delay(1000),
             finalize(() => {
                 this.loadService.blank();
             })
