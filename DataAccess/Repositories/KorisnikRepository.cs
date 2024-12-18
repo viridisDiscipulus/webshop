@@ -80,7 +80,7 @@ namespace DataAccess.Repositories
                                     k.AdresaID
                                 FROM Korisnici k 
                                 WHERE Email = '{email}'
-                                AND Lozinka = '{HashirajLozinkuAsync(lozinka)}'";
+                                AND Lozinka = '{lozinka}'";
 
                 }
 
@@ -207,7 +207,7 @@ namespace DataAccess.Repositories
                     command.Parameters.AddWithValue("@Id", korisnik.Id);
                     command.Parameters.AddWithValue("@Alias", korisnik.Alias);
                     command.Parameters.AddWithValue("@KorisnickoIme", korisnik.KorisnickoIme);
-                    command.Parameters.AddWithValue("@Lozinka", HashirajLozinkuAsync(korisnik.Lozinka));
+                    command.Parameters.AddWithValue("@Lozinka", korisnik.Lozinka);
                     command.Parameters.AddWithValue("@Email", korisnik.Email);
                     command.Parameters.AddWithValue("@AdresaID", -1);
 
@@ -295,7 +295,7 @@ namespace DataAccess.Repositories
                             korisnikCommand.Parameters.AddWithValue("@Id", korisnik.Id);
                             korisnikCommand.Parameters.AddWithValue("@Alias", korisnik.Alias ?? (object)DBNull.Value);
                             korisnikCommand.Parameters.AddWithValue("@KorisnickoIme", korisnik.KorisnickoIme);
-                            korisnikCommand.Parameters.AddWithValue("@Lozinka", HashirajLozinkuAsync(korisnik.Lozinka));
+                            korisnikCommand.Parameters.AddWithValue("@Lozinka", korisnik.Lozinka);
                             korisnikCommand.Parameters.AddWithValue("@Email", korisnik.Email);
                             korisnikCommand.Parameters.AddWithValue("@AdresaID", korisnik.AdresaId > 0 ? korisnik.AdresaId : -1);
 

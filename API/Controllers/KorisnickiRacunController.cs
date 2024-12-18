@@ -25,7 +25,7 @@ namespace API.Controllers
             _mapper = mapper;
         }
  
-        [Authorize]
+        // [Authorize]
         [HttpGet]
         public async Task<ActionResult<KorisnikPovratniModel>> GetCurrentUser()
         {
@@ -53,7 +53,7 @@ namespace API.Controllers
             return await _korisnikService.CheckEmailExistsAsync(email);
         }
 
-        [Authorize]
+        // [Authorize]
         [HttpGet("adresa")]
         public async Task<ActionResult<AdresaPovratniModel>> GetUserAddress()
         {
@@ -70,7 +70,7 @@ namespace API.Controllers
             return _mapper.Map<Adresa, AdresaPovratniModel>(korisnik.Adresa);
         }
 
-        [Authorize]
+        // [Authorize]
         [HttpPut("adresa")]
         public async Task<ActionResult<AdresaPovratniModel>> UpdateUserAddress(AdresaPovratniModel adresa)
         {

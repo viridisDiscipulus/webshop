@@ -1,4 +1,5 @@
 using System.Data;
+using System.IO;
 using Api.Extensions;
 using API.Extensions;
 using API.Middleware;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Services;
 using StackExchange.Redis;
 
@@ -34,9 +36,13 @@ namespace API
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins("http://localhost:4200") // URL Angular aplikacije
-                                    .AllowAnyMethod()
-                                    .AllowAnyHeader());
+                    // builder => builder.WithOrigins("http://localhost:4200") // URL Angular aplikacije
+                    //                 .AllowAnyMethod()
+                    //                 .AllowAnyHeader());
+                        builder => builder.SetIsOriginAllowed(origin => true) 
+                        .AllowAnyMethod()                   
+                        .AllowAnyHeader()                  
+                        .AllowCredentials());
             });
 
             services.AddControllers();
@@ -75,6 +81,11 @@ namespace API
             app.UseRouting();
 
             app.UseStaticFiles();
+            // app.UseStaticFiles(new StaticFileOptions{
+            //     FileProvider = new PhysicalFileProvider(
+            //         Path.Combine(Directory.GetCurrentDirectory(), "Sadrzaj")),
+            //     RequestPath = "/sadrzaj"
+            // });
 
              // Enable CORS
             app.UseCors("AllowSpecificOrigin");
