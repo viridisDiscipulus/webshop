@@ -18,16 +18,16 @@ namespace Api.Extensions
                 });
 
                 
-                var securitySchema = new OpenApiSecurityScheme
-                {
-                    Description = "JWT Auth Bearer Scheme (Koristite bilo koji token za testiranje)", 
-                    Name = "Autorizacija",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "bearer"
-                };
+                // var securitySchema = new OpenApiSecurityScheme
+                // {
+                //     Description = "JWT Auth Bearer Scheme (Koristite bilo koji token za testiranje)", 
+                //     Name = "Autorizacija",
+                //     In = ParameterLocation.Header,
+                //     Type = SecuritySchemeType.Http,
+                //     Scheme = "bearer"
+                // };
 
-                c.AddSecurityDefinition("Bearer", securitySchema); 
+                // c.AddSecurityDefinition("Bearer", securitySchema); 
             });
 
         return services;
