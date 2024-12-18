@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[Uloge] (
+    [ID]    INT            IDENTITY (1, 1) NOT NULL,
+    [Naziv] NVARCHAR (256) NOT NULL,
+    CONSTRAINT [PK__Uloge__3214EC073A753288] PRIMARY KEY CLUSTERED ([ID] ASC)
+);
+
