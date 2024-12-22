@@ -27,6 +27,9 @@ namespace API
             _config = configuration;
         }
 
+
+        
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));                      
@@ -81,11 +84,11 @@ namespace API
             app.UseRouting();
 
             app.UseStaticFiles();
-            // app.UseStaticFiles(new StaticFileOptions{
-            //     FileProvider = new PhysicalFileProvider(
-            //         Path.Combine(Directory.GetCurrentDirectory(), "Sadrzaj")),
-            //     RequestPath = "/sadrzaj"
-            // });
+            app.UseStaticFiles(new StaticFileOptions{
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "Sadrzaj")),
+                RequestPath = "/Sadrzaj"
+            });
 
              // Enable CORS
             app.UseCors("AllowSpecificOrigin");
@@ -101,6 +104,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }

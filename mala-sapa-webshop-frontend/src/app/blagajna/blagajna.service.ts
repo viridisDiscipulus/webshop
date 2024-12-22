@@ -1,10 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
 import { INacinIsporuke } from '../shared/models/nacinIsporuke';
 import { map } from 'rxjs/operators';
 import { INarudzbaZaKreiranje, IPlacanje } from '../shared/models/narudzba';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'

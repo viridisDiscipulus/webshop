@@ -1,10 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { IKorisnik } from '../shared/models/korisnik';
-import { KorisnickiRacunService } from '../korisnicki-racun/korisnicki-racun.service';
-import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',

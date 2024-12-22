@@ -1,17 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import { IArtiklKosarica, IKosarica, IKosaricaUkupno, Kosarica } from '../shared/models/kosarica';
 import { map } from 'rxjs/operators';
 import { IProizvod } from '../shared/models/proizvodi';
 import { INacinIsporuke } from '../shared/models/nacinIsporuke';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class KosaricaService {
-  baseUrl = environment.apiUrl;
+  baseUrl = environment.apiUrl
   private kosaricaSource = new BehaviorSubject<IKosarica>(null);
   kosarica$ = this.kosaricaSource.asObservable();
   private kosaricaUkupnoSource = new BehaviorSubject<IKosaricaUkupno>(null);

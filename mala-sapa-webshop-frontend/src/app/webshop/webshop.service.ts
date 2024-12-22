@@ -5,12 +5,13 @@ import { IRobnaMarka } from '../shared/models/robnaMarka';
 import { IVrstaProizvoda } from '../shared/models/vrstaProizvoda';
 import { map } from 'rxjs/operators';
 import { WebshopParametri } from '../shared/models/webshopParametri';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebshopService {
-  baseUrl = 'http://localhost:5000/api/';
+  baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 

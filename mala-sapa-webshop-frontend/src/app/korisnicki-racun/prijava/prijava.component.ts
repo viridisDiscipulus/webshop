@@ -30,7 +30,7 @@ export class PrijavaComponent implements OnInit {
   prijaviSe() {
     this.korisnickiRacun.prijava(this.prijavaForm.value).subscribe(() => {
       this.router.navigateByUrl(this.returnUrl);
-      console.log('Uspjesno prijavljen');
+      // console.log('Uspjesno prijavljen');
     }, (error) => {
       console.error('Greska kod prijave', error);
     });
