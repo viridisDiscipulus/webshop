@@ -14,7 +14,7 @@ namespace API.Controllers
     {
         public IActionResult Index()
         {
-            return PhysicalFile(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html"), "text/HTML");
+            return PhysicalFile(Path.Combine("mala-sapa-webshop-frontend/dist/mala-sapa-webshop-frontend", "index.html"), "text/HTML");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

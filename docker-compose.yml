@@ -1,0 +1,53 @@
+services:
+  angular-app:
+    build:
+      context: ./mala-sapa-webshop-frontend  # Path to the Angular app
+    ports:
+      - "8081:80"  # Expose Angular app on port 8081
+    networks:
+      - app-network
+
+  dotnet-api:
+    build:
+      context: ./API # Path to the .NET Core API
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=sql-server;Database=WebShop;User=sa;Password=ComplexP@ssw0rd!;
+    depends_on:
+      - sql-server
+      - redis
+    ports:
+      - "5000:80"  # Expose .NET API internally within Docker
+    networks:
+      - app-network
+
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest  # Update to SQL Server 2022 (v16)
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=ComplexP@ssw0rd!
+    ports:
+      - "1433:1433"  # Expose SQL Server on port 1433
+    networks:
+      - app-network
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"  # Expose Redis on port 6379
+    networks:
+      - app-network
+
+  nginx:
+    build:
+      context: ./nginx  # Path to the Nginx Dockerfile
+    ports:
+      - "80:80"  # Expose Nginx on port 80
+    depends_on:
+      - dotnet-api
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
