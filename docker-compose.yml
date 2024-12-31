@@ -11,18 +11,21 @@ services:
     build:
       context: ./API # Path to the .NET Core API
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__DefaultConnection=Server=sql-server;Database=WebShop;User=sa;Password=ComplexP@ssw0rd!;
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=WebShop;User Id=sa;Password=ComplexP@ssw0rd!;TrustServerCertificate=True;;
+      - ConnectionStrings__Redis=redis:6379  # Redis connection string using the service name
     depends_on:
-      - sql-server
+      - sqlserver
       - redis
+    volumes:
+      - ./mala-sapa-webshop-frontend/dist:/webshop/mala-sapa-webshop-frontend/dist
     ports:
       - "5000:80"  # Expose .NET API internally within Docker
     networks:
       - app-network
 
-  sql-server:
+  sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest  # Update to SQL Server 2022 (v16)
+    container_name: sqlserver
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=ComplexP@ssw0rd!
@@ -30,9 +33,14 @@ services:
       - "1433:1433"  # Expose SQL Server on port 1433
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "ComplexP@ssw0rd!", "-Q", "SELECT 1"]
+      interval: 10s
+      retries: 5
 
   redis:
     image: redis:alpine
+    container_name: redis
     ports:
       - "6379:6379"  # Expose Redis on port 6379
     networks:
@@ -44,7 +52,9 @@ services:
     ports:
       - "80:80"  # Expose Nginx on port 80
     depends_on:
-      - dotnet-api
+      - dotnet-api  # Ensure Nginx waits for dotnet-api to start
+    volumes:
+      - ./mala-sapa-webshop-frontend/dist:/usr/share/nginx/html  # Serve Angular app from Nginx's default directory
     networks:
       - app-network
 
