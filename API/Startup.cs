@@ -27,25 +27,32 @@ namespace API
             _config = configuration;
         }
 
-
-        
-
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));                      
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddAutoMapper(typeof(ProfiliZaMappiranje));
 
+            // services.AddCors(options =>
+            // {
+            //     options.AddPolicy("AllowSpecificOrigin",
+            //         builder => builder.WithOrigins("http://localhost:4200") // URL Angular aplikacije
+            //                         .AllowAnyMethod()
+            //                         .AllowAnyHeader()
+            //                         .SetIsOriginAllowed(origin => true)
+            //                         .AllowCredentials());
+            // });
+
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowSpecificOrigin",
-                    // builder => builder.WithOrigins("http://localhost:4200") // URL Angular aplikacije
-                    //                 .AllowAnyMethod()
-                    //                 .AllowAnyHeader());
-                        builder => builder.SetIsOriginAllowed(origin => true) 
-                        .AllowAnyMethod()                   
-                        .AllowAnyHeader()                  
-                        .AllowCredentials());
+                options.AddPolicy("AllowSpecificOrigin", builder =>
+                {
+                    builder
+                        .WithOrigins("http://10.0.2.15:8081")  // if accessed from within the container
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                });
             });
 
             services.AddControllers();

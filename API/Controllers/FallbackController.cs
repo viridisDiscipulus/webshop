@@ -10,11 +10,14 @@ using Microsoft.Extensions.Logging;
 namespace API.Controllers
 {
     [Route("[controller]")]
+    [ApiExplorerSettings(IgnoreApi = true)] // Exclude from Swagger
     public class FallbackController : Controller
     {
+        [HttpGet]
         public IActionResult Index()
         {
-            return PhysicalFile(Path.Combine("mala-sapa-webshop-frontend/dist/mala-sapa-webshop-frontend", "index.html"), "text/HTML");
+            var indexPath = Path.Combine(Directory.GetCurrentDirectory(), "webshop/mala-sapa-webshop-frontend/dist/mala-sapa-webshop-frontend", "index.html");
+            return PhysicalFile(indexPath, "text/html");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -23,4 +26,7 @@ namespace API.Controllers
             return View("Error!");
         }
     }
+
+
+
 }
